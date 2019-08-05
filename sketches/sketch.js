@@ -5,9 +5,8 @@ function setup() {
 
 function draw() {
   // colour the background black
-  background(0);
-  // select white as a colour
-  fill(255);
-  // draw a rectangle
-  rect(150, 150, 100, 100);
+background(0, 160, 250);
+  
+  
+  
 }
