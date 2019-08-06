@@ -84,3 +84,12 @@ progress {
     transform: rotate(90deg);
     right: -5px;
 }
+
+#speedText {
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    bottom: 65px;
+    font-size: 15px;
+    left: 50px;
+}
