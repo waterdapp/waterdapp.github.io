@@ -1,3 +1,5 @@
+/* Add the pixel font using: [font-family: 'Press Start 2P', cursive;] */
+
 body {
     margin:0;
     padding:0;
@@ -26,12 +28,7 @@ canvas {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
-  }
+}
 
 progress[value] {
     -webkit-appearance: none;
@@ -47,4 +44,12 @@ progress[value]::-webkit-progress-bar {
 
 progress[value]::-webkit-progress-value {
     background-color: #797979;
+}
+
+progress {
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
 }
