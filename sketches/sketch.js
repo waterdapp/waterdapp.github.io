@@ -19,6 +19,7 @@ let startButton;
 let randNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress;
+let speedSlider;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -42,7 +43,7 @@ function setup() {
       isLogoVisible = !(isLogoVisible);
 
       // Add the time slider
-      newSlider(40, canvas.height - 50);
+      speedSlider = newSlider(40, canvas.height - 50);
       
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
@@ -79,6 +80,16 @@ function draw() {
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
    
+    // Get value of slider to determine daySpeed
+
+    if (speedSlider.value() === 0) {
+      daySpeed = 0.02;
+    } else if (speedSlider.value() === 1) {
+      daySpeed = 0.1;
+    } else if (speedSlider.value() === 2) {
+      daySpeed = 0.18;
+    }
+
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
 
