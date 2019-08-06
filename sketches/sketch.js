@@ -20,6 +20,7 @@ let randNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress;
 let speedSlider;
+let bob = 0
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -94,7 +95,7 @@ function draw() {
 
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
-
+    bob = sin(angle) * 50
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -103,7 +104,8 @@ function draw() {
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
     //Draw the island
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200, 1000, 1000)
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+
     
     
     // Draw plant related stuff!
@@ -120,7 +122,7 @@ function loadSeed() {
 }
 
 function drawSeed() {
-  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2 - 200, seedImgWidth, seedImgHeight);
+  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
 function windowResized(){
