@@ -1,4 +1,4 @@
-let gradient = 0
+let gradient = 250
 
 let x = window.innerWidth - window.innerWidth 
 let y = window.innerHeight / 2
@@ -6,16 +6,20 @@ let y = window.innerHeight / 2
 let canvas;
 let value = 0;
 let img;
+let moon
+let sun
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
+  sun = loadImage('../src/assets/slider/Sun.png');
 }
 
 function setup() {
   // create a canvas
-  canvas = createCanvas(window.innerWidth, window.innerHeight);
+  canvas = createCanvas(window.innerWidth, window.innerHeight);                               //origional blue rgb values are 0, 160, 250
   canvas.parent('sketchHolder')
   img.loadPixels();
+  sun.loadPixels();
   
   canvas.mousePressed(() => {
     if(value === 0) {
@@ -32,48 +36,25 @@ function windowResized(){
 }
 
 function draw() {
-  var colour = [0, gradient, gradient]
+  var colour = [0, 160, gradient]
   background(colour[0], colour[1], colour[2]);
 if (value === 0) {
   image(img,window.innerWidth/ 2 - 320 , window.innerHeight / 2 - 320, 640, 640);
   }
 if(value === 1){
 
-rectMode(CENTER)
-noStroke()
 fill(232, 215, 28)
-ellipse(x, y, 200, 200)
+image(sun, x - 250, y - 250, 500, 500)
 
 if (x >=  window.innerWidth / 2) {
-  x = x + 02
-  y = y + 0.5
+  x = x + 0.2
+  y = y + 0.05
 } else{
 x = x + 0.2
 y = y + -0.05}
 
-
-//x = x + -0.5
-//y = y + 02
-
-
-
-
-
 }
-  
-
-}
-
-
-
-
-
-
-
-
-
-
-function clearCanvas() {
+}function clearCanvas() {
   if (value === 0) {
   
   value = 1
@@ -88,6 +69,21 @@ function clearCanvas() {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function newSlider(x, y) {
   var slider;
@@ -108,3 +104,4 @@ function newProgress(x, y, max) {
   progress.attribute('max', max)
   return progress;
 }
+
