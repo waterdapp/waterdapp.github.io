@@ -1,16 +1,17 @@
 let seedImg, seedImgWidth, seedImgHeight, seedImgPath;
 let startButton;
-let gradient = 0
+let gradient = 0;
 
-let x = window.innerWidth - window.innerWidth 
-let y = window.innerHeight / 2
+let sunx = 0; 
+let suny = window.innerHeight / 2
 
 let canvas;
-let value = 0;
-let img;
+let isLogoVisible = true;
+let logoImg;
 
 function preload() {
-  img = loadImage('../src/branding/logo.png');
+  logoImg = loadImage('../src/branding/logo.png');
+  seedImg = loadSeed();
 }
 
 function setup() {
@@ -18,71 +19,60 @@ function setup() {
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   noSmooth();
   canvas.parent('sketchHolder')
-  img.loadPixels();
+  logoImg.loadPixels();
   
   canvas.mousePressed(() => {
-    if(value === 0) {
-      value = 1;
+    if(isLogoVisible) {
+      isLogoVisible = !(isLogoVisible);
       newSlider(10, 50);
-      newProgress(200, 50, '100');
+      newProgress(200, 50, '100'); 
+      drawSeed();
     }
   })
-  // colour the background
-  background(0, 160, 250);
-
-  // Example trigger for seed display (we can replace button for actual trigger such as 
-  //   clicking on the logo).
-  startButton = createButton('Create seed');
-  startButton.position(40, 40);
-  startButton.size(50, 50);
-  startButton.mousePressed(createSeed);
 }
 
 let randNum;
-function createSeed() {
+seedImgWidth = 200;
+seedImgHeight = 200;
+function loadSeed() {
+  console.log("Working");
   randNum = (Math.floor(Math.random() * 8) + 1).toString();
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
-  
-  seedImgWidth = 200;
-  seedImgHeight = 200;
 
-  loadImage(seedImgPath, seedImg => {
-    image(seedImg, window.innerWidth/2 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2, seedImgWidth, seedImgHeight);
-  });
-
-  //Remove button so event can only happen once
-  startButton.remove();
-  
+  return loadImage(seedImgPath);
+}
+function drawSeed() {
+  image(seedImg, window.innerWidth/2 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2, seedImgWidth, seedImgHeight);
 }
 
 function draw() {
   var colour = [0, gradient, gradient]
   background(colour[0], colour[1], colour[2]);
-  if (value === 0) {
-    image(img,window.innerWidth/ 2 - 320 , window.innerHeight / 2 - 320, 640, 640);
+  if (isLogoVisible) {
+    image(logoImg,window.innerWidth/ 2 - 320 , window.innerHeight / 2 - 320, 640, 640);
   }
-  if(value === 1) {
+  if (!(isLogoVisible)) {
     rectMode(CENTER)
     noStroke()
     fill(232, 215, 28)
-    ellipse(x, y, 200, 200)
+    ellipse(sunx, suny, 200, 200)
 
-    if (x >=  window.innerWidth / 2) {
-      x = x + 02
-      y = y + 0.5
+    if (sunx >=  window.innerWidth / 2) {
+      sunx = sunx + 02
+      suny = suny + 0.5
     } else {
-      x = x + 0.2
-      y = y + -0.05
+      sunx = sunx + 0.2
+      suny = suny + -0.05
     }
+    drawSeed();
   }
 }
 function clearCanvas() {
-  if (value === 0) {
-    value = 1
+  if (isLogoVisible) {
+    isLogoVisible = !(isLogoVisible);
   } 
-  background(0, 160, 250);
-  if (value === 0) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+  if (!(isLogoVisible)) {
+    image(logoImg, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
     return;
   }
 }
