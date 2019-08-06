@@ -1,51 +1,75 @@
-let gradient = 250
+let seedImg, seedImgWidth, seedImgHeight, seedImgPath;
+let startButton;
+let gradient = 250;
 
 let x = window.innerWidth - window.innerWidth;
 let y = window.innerHeight / 2;
 
 let canvas;
 let value = 0;
-let img;
+let logoImg;
 let moon;
-let sun;
+
+let sunImg;
+let sunx = 0; 
+let suny = window.innerHeight / 2
+let isLogoVisible = true;
 
 let hydrationProgress, healthProgress;
 
 function preload() {
-  img = loadImage('../src/branding/logo.png');
+  logoImg = loadImage('../src/branding/logo.png');
   sun = loadImage('../src/assets/sun/sun1.png');
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
+  seedImg = loadSeed();
+  sunImg = loadImage('../src/assets/sun/sun1.png');
 }
 
 function setup() {
   // create a canvas
   canvas = createCanvas(window.innerWidth, window.innerHeight); //origional blue rgb values are 0, 160, 250
+  noSmooth();
   canvas.parent('sketchHolder')
-  img.loadPixels();
-  sun.loadPixels();
+  logoImg.loadPixels();
+  sunImg.loadPixels();
 
   canvas.mousePressed(() => {
-    if (value === 0) {
-      value = 1;
+    if (isLogoVisible) {
+      isLogoVisible = !(isLogoVisible);
       newSlider(40, canvas.height - 50);
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
-      console.log(hydrationProgress, healthProgress);
+      drawSeed();
     }
   })
 }
 
-function windowResized() {
+let randNum;
+seedImgWidth = 200;
+seedImgHeight = 200;
+
+function loadSeed() {
+  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
+
+  return loadImage(seedImgPath);
+}
+
+function drawSeed() {
+  image(seedImg, window.innerWidth/2 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2, seedImgWidth, seedImgHeight);
+}
+
+function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
   var colour = [0, 160, gradient]
   background(colour[0], colour[1], colour[2]);
-  if (value === 0) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+  if (isLogoVisible) {
+    image(logoImg, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
   }
-  if (value === 1) {
+  if (!(isLogoVisible)) {
     // Game draw loop
     // Every other second run this
     if (frameCount % 60 === 0) {
@@ -54,31 +78,31 @@ function draw() {
     }
 
 
-    // Sun logic
-    fill(232, 215, 28)
-    image(sun, x - 250, y - 250, 500, 500)
+    rectMode(CENTER)
+    noStroke()
 
-    if (x >= window.innerWidth / 2) {
-      x = x + 0.2
-      y = y + 0.05
+    fill(232, 215, 28)
+    image(sunImg, sunx - 250, suny - 250, 500, 500)
+
+    // sun logic
+    if (sunx >=  window.innerWidth / 2) {
+      sunx = sunx + 02
+      suny = suny + 0.5
     } else {
-      x = x + 0.2
-      y = y + -0.05
+      sunx = sunx + 0.2
+      suny = suny + -0.05
     }
+    drawSeed();
 
   }
 }
 
-
-
 function clearCanvas() {
-  if (value === 0) {
-
-    value = 1
-  }
-  background(0, 160, 250);
-  if (value === 0) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+  if (isLogoVisible) {
+    isLogoVisible = !(isLogoVisible);
+  } 
+  if (!(isLogoVisible)) {
+    image(logoImg, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
     return;
   }
 }
@@ -100,6 +124,6 @@ function newProgress(x, y, max, id) {
   progress.class('progress');
   progress.value('100');
   progress.attribute('max', max);
-  progress.id(id)
+  progress.id(id);
   return progress;
 }
