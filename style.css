@@ -13,7 +13,7 @@ canvas {
     -webkit-appearance: none;
     appearance: none;
     width: 15px;
-    height: 30px;
+    height: 40px;
     background: #ffffff;
     cursor: pointer;
 }
@@ -28,22 +28,27 @@ canvas {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    border: 3px solid black;
 }
 
 progress[value] {
     -webkit-appearance: none;
     appearance: none;
-
     width: 250px;
     height: 20px;
+    border: 3px solid black;
 }
 
 progress[value]::-webkit-progress-bar {
     background-color: #a1a1a1;
 }
 
-progress[value]::-webkit-progress-value {
-    background-color: #797979;
+progress[value]#healthProgress::-webkit-progress-value {
+    background-color: #ff0000;
+}
+
+progress[value]#hydrationProgress::-webkit-progress-value {
+    background-color: #0000ff;
 }
 
 progress {
@@ -52,4 +57,30 @@ progress {
     -ms-transform: rotate(270deg);
     -o-transform: rotate(270deg);
     transform: rotate(270deg);
+}
+
+#healthText {
+    top: 50%;
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+    left: 10px;
+}
+
+#hydrationText {
+    top: 50%;
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: -5px;
 }
