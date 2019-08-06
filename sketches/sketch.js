@@ -39,6 +39,12 @@ function setup() {
       newSlider(40, canvas.height - 50);
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
+      text = createP('Health');
+      text.parent('sketchHolder');
+      text.id('healthText');
+      text = createP('Hydration');
+      text.parent('sketchHolder');
+      text.id('hydrationText');
       drawSeed();
     }
   })
@@ -93,7 +99,6 @@ function draw() {
       suny = suny + -0.05
     }
     drawSeed();
-
   }
 }
 
@@ -126,4 +131,9 @@ function newProgress(x, y, max, id) {
   progress.attribute('max', max);
   progress.id(id);
   return progress;
+}
+
+function newText(text, font, textSize, x, y, id) {
+  var text = createP(text);
+  return text;
 }

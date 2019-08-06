@@ -58,3 +58,29 @@ progress {
     -o-transform: rotate(270deg);
     transform: rotate(270deg);
 }
+
+#healthText {
+    top: 50%;
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+    left: 10px;
+}
+
+#hydrationText {
+    top: 50%;
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: -5px;
+}
