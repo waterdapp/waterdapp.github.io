@@ -20,11 +20,15 @@ function setup() {
   canvas.mousePressed(() => {
     if(value === 0) {
       value = 1;
-      newSlider(40, window.innerHeight - 50);
-      newProgress(-100, window.innerHeight / 2, '100');
-      newProgress(window.innerWidth - 150, window.innerHeight / 2, '100');
+      newSlider(40, canvas.height - 50);
+      newProgress(-100, canvas.height / 2, '100');
+      newProgress(canvas.width - 150, canvas.height / 2, '100');
     }
   })
+}
+
+function windowResized(){
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
