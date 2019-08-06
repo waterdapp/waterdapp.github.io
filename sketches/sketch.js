@@ -20,8 +20,9 @@ function setup() {
   canvas.mousePressed(() => {
     if(value === 0) {
       value = 1;
-      newSlider(10, 50);
-      newProgress(200, 50, '100');
+      newSlider(40, window.innerHeight - 50);
+      newProgress(-100, window.innerHeight / 2, '100');
+      newProgress(window.innerWidth - 150, window.innerHeight / 2, '100');
     }
   })
 }
