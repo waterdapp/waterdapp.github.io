@@ -13,7 +13,7 @@ canvas {
     -webkit-appearance: none;
     appearance: none;
     width: 15px;
-    height: 30px;
+    height: 40px;
     background: #ffffff;
     cursor: pointer;
 }
@@ -44,7 +44,7 @@ progress[value]::-webkit-progress-bar {
 }
 
 progress[value]::-webkit-progress-value {
-    background-color: #797979;
+    background-color: #555555;
 }
 
 progress {

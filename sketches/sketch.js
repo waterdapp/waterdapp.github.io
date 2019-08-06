@@ -1,17 +1,17 @@
 let gradient = 250
 
-let x = window.innerWidth - window.innerWidth 
-let y = window.innerHeight / 2
+let x = window.innerWidth - window.innerWidth ;
+let y = window.innerHeight / 2;
 
 let canvas;
 let value = 0;
 let img;
-let moon
-let sun
+let moon;
+let sun;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
-  sun = loadImage('../src/assets/slider/Sun.png');
+  sun = loadImage('../src/assets/sun/sun1.png');
 }
 
 function setup() {
