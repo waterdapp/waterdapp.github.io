@@ -24,6 +24,7 @@ function preload() {
   img = loadImage('../src/branding/logo.png');
   sun = loadImage('../src/assets/sun/Sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
+  island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
 };
@@ -35,6 +36,7 @@ function setup() {
   img.loadPixels();
   sun.loadPixels();
   moon.loadPixels();
+  island.loadPixels();
   noSmooth();
   canvas.mousePressed(() => {
     if (isLogoVisible) {
@@ -86,6 +88,10 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
+    //Draw the island
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200, 1000, 1000)
+    
+    
     // Draw plant related stuff!
     drawSeed();
   }
@@ -100,7 +106,7 @@ function loadSeed() {
 }
 
 function drawSeed() {
-  image(seedImg, window.innerWidth/2 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2, seedImgWidth, seedImgHeight);
+  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2 - 200, seedImgWidth, seedImgHeight);
 }
 
 function windowResized(){
