@@ -55,6 +55,9 @@ function setup() {
       text = createP('Hydration');
       text.parent('sketchHolder');
       text.id('hydrationText');
+      text = createP('Speed');
+      text.parent('sketchHolder');
+      text.id('speedText');
     }
   })
 }
@@ -136,9 +139,4 @@ function newProgress(x, y, max, id) {
   progress.attribute('max', max);
   progress.id(id);
   return progress;
-}
-
-function newText(text, font, textSize, x, y, id) {
-  var text = createP(text);
-  return text;
 }
