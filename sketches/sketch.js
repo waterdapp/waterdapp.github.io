@@ -21,6 +21,14 @@ let isLogoVisible = true;
 let hydrationProgress, healthProgress;
 let speedSlider;
 let bob = 0
+let watering1;
+let watering2;
+// variable to keep track of current watering state (pour/normal)
+let mousedown = false;
+let currentselected = "";
+let selectwateringcan;
+let selectpesticide;
+let pesticide2;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -29,6 +37,10 @@ function preload() {
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
+  watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
+  watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
+  pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
+  pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
 };
 
 function setup() {
@@ -39,7 +51,14 @@ function setup() {
   sun.loadPixels();
   moon.loadPixels();
   island.loadPixels();
+  watering1.loadPixels();
+  watering2.loadPixels();
+  pesticide.loadPixels();
+  pesticide2.loadPixels();
   noSmooth();
+  canvas.mouseReleased(() => {
+  mousedown = false
+  })
   canvas.mousePressed(() => {
     if (isLogoVisible) {
       // Flip the value of logo visible
@@ -52,6 +71,21 @@ function setup() {
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
 
+      selectwateringcan = createButton('e')
+      selectwateringcan.html('<img width="100" height="100" src="../src/assets/wateringcans/wateringcan1.png"></img>')
+      selectwateringcan.position(10,10)
+      selectwateringcan.mousePressed(() => {
+          currentselected = "watering_can"
+        
+      })
+      selectpesticide = createButton('e')
+      selectpesticide.html('<img width="100" height="100" src="../src/assets/wateringcans/pesticide.png"></img>')
+      selectpesticide.position(140,10)
+      selectpesticide.mousePressed(() => {
+          currentselected = "pesticide"
+        
+      })
+
       // Setup both bars.
       text = createP('Health');
       text.parent('sketchHolder');
@@ -62,6 +96,11 @@ function setup() {
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
+
+    }else {
+      // check pouring variable and switch image based on it.
+      mousedown = true
+
     }
   })
 }
@@ -106,8 +145,25 @@ function draw() {
     //Draw the island
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
-    
-    
+    //Draw the watering can 
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      }
+      else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+    //Draw pesticide
+    if(currentselected === 'pesticide'){
+      if (mousedown){
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      }
+       else {
+      image(pesticide,mouseX - 35,mouseY- 66,200,200) 
+  
+  }
+}
     // Draw plant related stuff!
     drawSeed();
   }
