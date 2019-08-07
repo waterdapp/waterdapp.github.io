@@ -52,7 +52,7 @@ function setup() {
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
       growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
-
+      hydrationProgress.value(19)
       // Setup both bars.
       text = createP('Health');
       text.parent('sketchHolder');
@@ -97,6 +97,9 @@ function draw() {
       if (frameCount % 60 === 0) {
         hydrationProgress.value(hydrationProgress.value() - 1.8);
       }
+    }
+    if (hydrationProgress.value() < 20) {
+      healthProgress.value(healthProgress.value() - 0.01);
     }
 
     // Code for orbit and background colour calculation
