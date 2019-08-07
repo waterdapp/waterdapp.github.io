@@ -66,6 +66,15 @@ function setup() {
       text = createP('Growth');
       text.parent('sketchHolder');
       text.id('growthText');
+      var snailEmoji = createP('🐌');
+      snailEmoji.parent('sketchHolder');
+      snailEmoji.id('snailEmoji');
+      var personEmoji = createP('🚶');
+      personEmoji.parent('sketchHolder');
+      personEmoji.id('personEmoji');
+      var hareEmoji = createP('🐇');
+      hareEmoji.parent('sketchHolder');
+      hareEmoji.id('hareEmoji');
     }
   })
 }
@@ -107,13 +116,16 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
-    //Draw the island
+    // Draw the island
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     
     
     // Draw plant related stuff!
     drawSeed();
+
+    // Check if the speed is slow, medium or fast and show the emojis
+
   }
 }
 

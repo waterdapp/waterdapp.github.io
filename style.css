@@ -114,3 +114,24 @@ progress {
     font-size: 15px;
     left: 275px;
 }
+
+#snailEmoji {
+    position: absolute;
+    font-size: 10px;
+    bottom: 24px;
+    left: 45px;
+}
+
+#personEmoji {
+    position: absolute;
+    font-size: 12px;
+    bottom: 20px;
+    left: 80px;
+}
+
+#hareEmoji {
+    position: absolute;
+    font-size: 10px;
+    bottom: 24px;
+    left: 110px;
+}
