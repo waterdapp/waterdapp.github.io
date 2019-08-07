@@ -40,6 +40,8 @@ let dayCounterValueElement;
 let healthText;
 let hydrationText;
 
+daySpeeds =  [ 0.02, 0.5, 1.0 ]
+
 function preload() {
   img = loadImage('../src/branding/logo.png');
   sun = loadImage('../src/assets/sun/Sun1.png');
@@ -183,9 +185,10 @@ function draw() {
     // Get value of slider to determine daySpeed
 
     if (speedSlider.value() === 0) {
-      daySpeed = 0.02;
+      daySpeed = daySpeeds[0]
     } else if (speedSlider.value() === 1) {
       daySpeed = 0.1;
+
     } else if (speedSlider.value() === 2) {
       daySpeed = 0.18;
     }
@@ -251,6 +254,14 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
+    
+    // Hidden Day Speed changer by pressing the space bar
+    document.body.onkeydown = function(e){
+      if(e.keyCode == 32){
+           console.log("Space Bar Pressed");
+           daySpeedPrompt();
+      }
+  }
   }
 }
 
@@ -339,4 +350,11 @@ function newProgress(x, y, max, id) {
   progress.attribute('max', max);
   progress.id(id);
   return progress;
+}
+
+function daySpeedPrompt() {
+  var daySpeedPromptResult = prompt("Choose a speed from 0.01 to 1", daySpeed);
+  daySpeed = daySpeedPromptResult;
+  daySpeeds[0] = Number(daySpeedPromptResult);
+  speedSlider.value(0);
 }
