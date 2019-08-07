@@ -9,8 +9,8 @@ let moonPosition = {
   y: window.innerHeight,
 }
 let bugPosition = {
-  x: +1100,
-  y: +750,
+  x: (window.innerWidth / 2)- 150,
+  y: (window.innerHeight / 2)+ 140,
 }
 //let whichSeed;
 let seedHeightAlterer
