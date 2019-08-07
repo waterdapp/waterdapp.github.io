@@ -101,7 +101,7 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    bottom: 65px;
+    bottom: 95px;
     font-size: 15px;
     left: 50px;
 }
@@ -116,21 +116,21 @@ progress {
 
 #snailEmoji {
     position: absolute;
-    font-size: 10px;
-    bottom: 24px;
+    font-size: 17px;
+    bottom: 55px;
     left: 45px;
 }
 
 #personEmoji {
     position: absolute;
-    font-size: 12px;
-    bottom: 20px;
+    font-size: 17px;
+    bottom: 55px;
     left: 80px;
 }
 
 #hareEmoji {
     position: absolute;
-    font-size: 10px;
-    bottom: 24px;
+    font-size: 17px;
+    bottom: 55px;
     left: 110px;
 }
