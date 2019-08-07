@@ -55,7 +55,7 @@ let bug1;
 let bug2;
 let healthText;
 let hydrationText;
-
+let bugpesticidecollision = false 
 daySpeeds = [0.02, 0.5, 1.0]
 
 function preload() {
@@ -363,6 +363,12 @@ function draw() {
         daySpeedPrompt();
       }
     }
+    pesticide2(mouseX - 100, mouseY - 60, 200, 200);
+    bug2(bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200);
+   
+   
+   hit = collideRectRect(200,200,100,150,mouseXmoiuseY,50,75);
+    
   }
 
 }
