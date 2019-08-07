@@ -18,8 +18,9 @@ let seedImg, seedImgWidth = 250, seedImgHeight = 250, seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress;
+let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
+<<<<<<< HEAD
 let bob = 0
 let watering1;
 let watering2;
@@ -29,6 +30,11 @@ let currentselected = "";
 let selectwateringcan;
 let selectpesticide;
 let pesticide2;
+=======
+let bob = 0;
+let dayCounter;
+let dayCounterValueElement;
+>>>>>>> 0bfa929f9a88848c833768b3b9cbb12c4c9134b8
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -51,10 +57,15 @@ function setup() {
   sun.loadPixels();
   moon.loadPixels();
   island.loadPixels();
+<<<<<<< HEAD
   watering1.loadPixels();
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+=======
+  dayCounter = 0;
+  roundedDayNumber = 0;
+>>>>>>> 0bfa929f9a88848c833768b3b9cbb12c4c9134b8
   noSmooth();
   canvas.mouseReleased(() => {
   mousedown = false
@@ -70,6 +81,7 @@ function setup() {
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
+<<<<<<< HEAD
 
       selectwateringcan = createButton('e')
       selectwateringcan.html('<img width="100" height="100" src="../src/assets/wateringcans/wateringcan1.png"></img>')
@@ -86,6 +98,10 @@ function setup() {
         
       })
 
+=======
+      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
+      growthProgress.value(0);
+>>>>>>> 0bfa929f9a88848c833768b3b9cbb12c4c9134b8
       // Setup both bars.
       text = createP('Health');
       text.parent('sketchHolder');
@@ -96,11 +112,32 @@ function setup() {
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
+<<<<<<< HEAD
 
     }else {
       // check pouring variable and switch image based on it.
       mousedown = true
 
+=======
+      text = createP('Growth');
+      text.parent('sketchHolder');
+      text.id('growthText');
+      var snailEmoji = createP('🐌');
+      snailEmoji.parent('sketchHolder');
+      snailEmoji.id('snailEmoji');
+      var personEmoji = createP('🚶');
+      personEmoji.parent('sketchHolder');
+      personEmoji.id('personEmoji');
+      var hareEmoji = createP('🐇');
+      hareEmoji.parent('sketchHolder');
+      hareEmoji.id('hareEmoji');
+      text = createP('Days');
+      text.parent('sketchHolder');
+      text.id('daysText');
+      dayCounterValueElement = createP(roundedDayNumber / 1000);
+      dayCounterValueElement.parent('sketchHolder');
+      dayCounterValueElement.id('dayCounterText');
+>>>>>>> 0bfa929f9a88848c833768b3b9cbb12c4c9134b8
     }
   })
 }
@@ -111,8 +148,21 @@ function draw() {
   }
   if (!isLogoVisible) {
     // Every other second run this
-    if (frameCount % 60 === 0) {
-      hydrationProgress.value(hydrationProgress.value() - 1);
+    if (daySpeed === 0.1) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1);
+      }
+    } else if (daySpeed === 0.02) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 0.2);
+      }
+    } else if (daySpeed === 0.18) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1.8);
+      }
+    }
+    if (hydrationProgress.value() < 20) {
+      healthProgress.value(healthProgress.value() - 0.02);
     }
 
     // Code for orbit and background colour calculation
@@ -135,6 +185,17 @@ function draw() {
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
     bob = sin(angle) * 50
+
+
+    // Increase the day counter for the text
+
+    dayCounter = Math.floor((angle-180) / 360);
+
+      dayCounterValueElement.html(dayCounter);
+
+      console.log(angle);
+    
+
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -142,7 +203,7 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
-    //Draw the island
+    // Draw the island
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     //Draw the watering can 
@@ -166,6 +227,13 @@ function draw() {
 }
     // Draw plant related stuff!
     drawSeed();
+
+
+    document.body.onkeyup = function(e){
+      if(e.keyCode == 32){
+          daySpeed = 1;
+        }
+      }
   }
 }
 
