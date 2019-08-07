@@ -1,4 +1,3 @@
-
 let angle = 180
 let daySpeed = 0.1;
 let sunPosition = {
@@ -14,6 +13,9 @@ let canvas;
 let value = 0;
 let img;
 let moon;
+let cloud1;
+let cloud2;
+let cloud3;
 let sun;
 let pot;
 let seedImg, seedImgWidth = 100, seedImgHeight = 100, seedImgPath;
@@ -22,9 +24,19 @@ let randNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
-let bob = 0;
+let bob = 0
+let watering1;
+let watering2;
+// variable to keep track of current watering state (pour/normal)
+let mousedown = false;
+let currentselected = "";
+let selectwateringcan;
+let selectpesticide;
+let pesticide2;
 let dayCounter;
 let dayCounterValueElement;
+let healthText;
+let hydrationText;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -34,6 +46,13 @@ function preload() {
   pot = loadImage('../src/assets/pot/pot1.png')
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
+  watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
+  watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
+  pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
+  pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
+  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
+  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
+  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
 };
 
 
@@ -47,11 +66,20 @@ function setup() {
   sun.loadPixels();
   moon.loadPixels();
   island.loadPixels();
+  watering1.loadPixels();
+  watering2.loadPixels();
+  pesticide.loadPixels();
+  pesticide2.loadPixels();
+  cloud1.loadPixels();
+  cloud2.loadPixels()
+  cloud3.loadPixels();
   pot.loadPixels();
-  
   dayCounter = 0;
   roundedDayNumber = 0;
   noSmooth();
+  canvas.mouseReleased(() => {
+    mousedown = false
+  })
   canvas.mousePressed(() => {
     if (isLogoVisible) {
       // Flip the value of logo visible
@@ -63,27 +91,40 @@ function setup() {
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
+
+      selectwateringcan = createButton('e')
+      selectwateringcan.html('<img width="100" height="100" src="../src/assets/wateringcans/wateringcan1.png"></img>')
+      selectwateringcan.position(10,10)
+      selectwateringcan.mousePressed(() => {
+          currentselected = "watering_can"
+        
+      })
+      selectpesticide = createButton('e')
+      selectpesticide.html('<img width="100" height="100" src="../src/assets/wateringcans/pesticide.png"></img>')
+      selectpesticide.position(140,10)
+      selectpesticide.mousePressed(() => {
+          currentselected = "pesticide"
+      })
+
       growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
       growthProgress.value(0);
       // Setup both bars.
-      text = createP('Health');
-      text.parent('sketchHolder');
-      text.id('healthText');
-      text = createP('Hydration');
-      text.parent('sketchHolder');
-      text.id('hydrationText');
+      healthText = createP('Health');
+      healthText.parent('sketchHolder');
+      healthText.id('healthText');
+      hydrationText = createP('Hydration');
+      hydrationText.parent('sketchHolder');
+      hydrationText.id('hydrationText');
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
-      
       text = createP('seedData');
       text.parent('sketchHolder');
       text.id('seedText');
-     
+
       text = createP('Growth');
       text.parent('sketchHolder');
       text.id('growthText');
-     
       var snailEmoji = createP('🐌');
       snailEmoji.parent('sketchHolder');
       snailEmoji.id('snailEmoji');
@@ -101,6 +142,8 @@ function setup() {
       dayCounterValueElement.id('dayCounterText');
 
       seedDataBody();
+    } else {
+      mousedown = true;
     }
   })
 }
@@ -154,8 +197,7 @@ function draw() {
 
     dayCounter = Math.floor((angle-180) / 360);
 
-      dayCounterValueElement.html(dayCounter);
-    
+    dayCounterValueElement.html(dayCounter);
 
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
@@ -164,6 +206,25 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
+    // Draw the island
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+
+    //Draw the watering can 
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      } else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+    //Draw pesticide
+    if(currentselected === 'pesticide'){
+      if (mousedown) {
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      } else {
+        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+      }
+    }
     // Draw plant related stuff!
     drawSeed();
     if (randNum == 6 || randNum == 8) {
@@ -173,10 +234,21 @@ function draw() {
     }
     
     //Draw the island and pot
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
-    
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000);
+    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500);
 
+    // Make the text color red if hydration or health values are red
+    if (hydrationProgress.value() === 0) {
+      hydrationText.style('color', 'red');
+    } else {
+      hydrationText.style('color', 'white');
+    }
+
+    if (healthProgress.value() === 0) {
+      healthText.style('color', 'red');
+    } else {
+      healthText.style('color', 'white');
+    }
   }
 }
 function seedDataTitle(){
@@ -212,7 +284,6 @@ function seedDataBody(){
 
   }else if (randNum == 8){
     message = 'you have found a potato seed!';
-  }
 
   infoLabel.html(message + `
     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
