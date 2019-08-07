@@ -109,7 +109,7 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    top: 30px;
+    top: 50px;
     font-size: 15px;
     right: 75px;
 }
@@ -117,7 +117,16 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    top: 40px;
+    top: 70px;
+    font-size: 15px;
+    right: 75px;
+
+}
+#seedDataFunFact{
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    top: 90px;
     font-size: 15px;
     right: 75px;
 

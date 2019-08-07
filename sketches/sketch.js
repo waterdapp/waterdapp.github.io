@@ -202,6 +202,9 @@ function setup() {
 }
 
 function draw() {
+  //draw a rectangle
+  rectMode(CENTER)
+  rect(window.innerWidth - 200, window.innerHeight - 100, 400, 200 )
   if (isLogoVisible) {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
   }
@@ -376,6 +379,14 @@ function seedDataTitle() {
 }
 
 function seedDataBody() {
+  let message2 = '';
+
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   |
+    //|            |
+   // |____________|
   let infoLabel = createP('seedDataBody');
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
@@ -400,10 +411,17 @@ function seedDataBody() {
     message = 'you have found a blood seed!';
 
   } else if (randNum == 8) {
-    message = 'you have found a potato seed!';
+    message = 'you have found a potato seed!'
+    message2 = 'Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?'
   }
-  infoLabel.html(message + `
+  infoLabel.html(`
+    <p>
+    ${message}
+    </p>
     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
+    <p>
+    ${message2}
+    </p>
   `)
 }
 function growPlant(){
@@ -413,7 +431,8 @@ function growPlant(){
   
 }
 function loadSeed() {
-  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  //randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  randNum = 8
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
