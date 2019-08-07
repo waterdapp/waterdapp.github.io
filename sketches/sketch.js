@@ -20,9 +20,11 @@ let seedImg, seedImgWidth = 100, seedImgHeight = 100, seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress;
+let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
-let bob = 0
+let bob = 0;
+let dayCounter;
+let dayCounterValueElement;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -46,6 +48,9 @@ function setup() {
   moon.loadPixels();
   island.loadPixels();
   pot.loadPixels();
+  
+  dayCounter = 0;
+  roundedDayNumber = 0;
   noSmooth();
   canvas.mousePressed(() => {
     if (isLogoVisible) {
@@ -58,7 +63,8 @@ function setup() {
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
-
+      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
+      growthProgress.value(0);
       // Setup both bars.
       text = createP('Health');
       text.parent('sketchHolder');
@@ -73,6 +79,26 @@ function setup() {
       text = createP('seedData');
       text.parent('sketchHolder');
       text.id('seedText');
+     
+      text = createP('Growth');
+      text.parent('sketchHolder');
+      text.id('growthText');
+     
+      var snailEmoji = createP('🐌');
+      snailEmoji.parent('sketchHolder');
+      snailEmoji.id('snailEmoji');
+      var personEmoji = createP('🚶');
+      personEmoji.parent('sketchHolder');
+      personEmoji.id('personEmoji');
+      var hareEmoji = createP('🐇');
+      hareEmoji.parent('sketchHolder');
+      hareEmoji.id('hareEmoji');
+      text = createP('Days');
+      text.parent('sketchHolder');
+      text.id('daysText');
+      dayCounterValueElement = createP(roundedDayNumber / 1000);
+      dayCounterValueElement.parent('sketchHolder');
+      dayCounterValueElement.id('dayCounterText');
     }
   })
 }
@@ -83,8 +109,21 @@ function draw() {
   }
   if (!isLogoVisible) {
     // Every other second run this
-    if (frameCount % 60 === 0) {
-      hydrationProgress.value(hydrationProgress.value() - 1);
+    if (daySpeed === 0.1) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1);
+      }
+    } else if (daySpeed === 0.02) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 0.2);
+      }
+    } else if (daySpeed === 0.18) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1.8);
+      }
+    }
+    if (hydrationProgress.value() < 20) {
+      healthProgress.value(healthProgress.value() - 0.02);
     }
 
     // Code for orbit and background colour calculation
@@ -107,6 +146,17 @@ function draw() {
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
     bob = sin(angle) * 50
+
+
+    // Increase the day counter for the text
+
+    dayCounter = Math.floor((angle-180) / 360);
+
+      dayCounterValueElement.html(dayCounter);
+
+      console.log(angle);
+    
+
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -130,6 +180,11 @@ function seedData(){
     text.parent('sketchHolder');
     text.id('seedText');
 
+    document.body.onkeyup = function(e){
+      if(e.keyCode == 32){
+          daySpeed = 1;
+        }
+      }
   }
 }
 
