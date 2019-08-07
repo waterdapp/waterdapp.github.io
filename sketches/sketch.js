@@ -287,14 +287,17 @@ function seedDataBody() {
 
   } else if (randNum == 8) {
     message = 'you have found a potato seed!';
-
-    infoLabel.html(message + `
+  }
+  infoLabel.html(message + `
     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
   `)
-
-  }
 }
+function growPlant(){
 
+
+
+  
+}
 function loadSeed() {
   randNum = (Math.floor(Math.random() * 8) + 1).toString();
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
