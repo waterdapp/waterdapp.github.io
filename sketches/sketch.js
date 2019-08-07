@@ -150,7 +150,7 @@ function draw() {
 
 
 function loadSeed() {
-  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  randNum = (Math.floor(Math.random() * 9)).toString();
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
@@ -160,7 +160,7 @@ function drawSeed() {
 }
 
 function loadPlantMaterial() {
-  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  randNum = (Math.floor(Math.random() * 9)).toString();
   plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randNum, '.png');
 
   return loadImage(plantMaterialPath);
