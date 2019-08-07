@@ -13,6 +13,9 @@ let canvas;
 let value = 0;
 let img;
 let moon;
+let cloud1;
+let cloud2;
+let cloud3;
 let sun;
 let pot;
 let seedImg, seedImgWidth = 100, seedImgHeight = 100, seedImgPath;
@@ -47,6 +50,9 @@ function preload() {
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
+  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
+  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
+  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
 };
 
 
@@ -64,6 +70,9 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+  cloud1.loadPixels();
+  cloud2.loadPixels()
+  cloud3.loadPixels();
   pot.loadPixels();
   dayCounter = 0;
   roundedDayNumber = 0;
