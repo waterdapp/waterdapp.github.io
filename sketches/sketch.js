@@ -52,6 +52,7 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
+let bugpesticidecollision = false 
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
 daySpeeds = [0.02, 0.1, 0.18];
@@ -383,6 +384,12 @@ function draw() {
         daySpeedPrompt();
       }
     }
+    pesticide2(mouseX - 100, mouseY - 60, 200, 200);
+    bug2(bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200);
+   
+   
+   hit = collideRectRect(200,200,100,150,mouseXmoiuseY,50,75);
+    
   }
 
 }
