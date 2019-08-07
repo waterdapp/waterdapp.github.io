@@ -85,8 +85,18 @@ function draw() {
   }
   if (!isLogoVisible) {
     // Every other second run this
-    if (frameCount % 60 === 0) {
-      hydrationProgress.value(hydrationProgress.value() - 1);
+    if (daySpeed === 0.1) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1);
+      }
+    } else if (daySpeed === 0.02) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 0.2);
+      }
+    } else if (daySpeed === 0.18) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1.8);
+      }
     }
 
     // Code for orbit and background colour calculation
