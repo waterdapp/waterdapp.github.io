@@ -18,7 +18,7 @@ let seedImg, seedImgWidth = 250, seedImgHeight = 250, seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress;
+let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
 let bob = 0
 
@@ -51,6 +51,7 @@ function setup() {
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
+      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
 
       // Setup both bars.
       text = createP('Health');
@@ -62,6 +63,9 @@ function setup() {
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
+      text = createP('Growth');
+      text.parent('sketchHolder');
+      text.id('growthText');
     }
   })
 }

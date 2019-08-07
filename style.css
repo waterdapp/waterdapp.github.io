@@ -51,6 +51,18 @@ progress[value]#hydrationProgress::-webkit-progress-value {
     background-color: #0000ff;
 }
 
+progress[value]#growthProgress::-webkit-progress-value {
+    background-color: #228c22;
+}
+
+progress[value]#growthProgress {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg) scaleX(-1);
+}
+
 progress {
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
@@ -92,4 +104,13 @@ progress {
     bottom: 65px;
     font-size: 15px;
     left: 50px;
+}
+
+#growthText {
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    bottom: 65px;
+    font-size: 15px;
+    left: 275px;
 }
