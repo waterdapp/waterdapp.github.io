@@ -134,3 +134,19 @@ progress {
     bottom: 55px;
     left: 110px;
 }
+
+#daysText {
+    position: absolute;
+    bottom: 65px;
+    right: 70px;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+}
+
+#dayCounterText {
+    position: absolute;
+    bottom: 15px;
+    right: 90px;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+}
