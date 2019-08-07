@@ -18,7 +18,9 @@ let cloud2;
 let cloud3;
 let sun;
 let pot;
-let seedImg, seedImgWidth = 100, seedImgHeight = 100, seedImgPath;
+let seedImg, seedImgWidth = 100,
+  seedImgHeight = 100,
+  seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
@@ -60,7 +62,7 @@ function preload() {
 
 function setup() {
   // create a canvas
-  canvas = createCanvas(window.innerWidth, window.innerHeight); 
+  canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.parent('sketchHolder')
   img.loadPixels();
   sun.loadPixels();
@@ -87,23 +89,23 @@ function setup() {
 
       // Add the time slider
       speedSlider = newSlider(40, canvas.height - 50);
-      
+
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
 
       selectwateringcan = createButton('e')
       selectwateringcan.html('<img width="100" height="100" src="../src/assets/wateringcans/wateringcan1.png"></img>')
-      selectwateringcan.position(10,10)
+      selectwateringcan.position(10, 10)
       selectwateringcan.mousePressed(() => {
-          currentselected = "watering_can"
-        
+        currentselected = "watering_can"
+
       })
       selectpesticide = createButton('e')
       selectpesticide.html('<img width="100" height="100" src="../src/assets/wateringcans/pesticide.png"></img>')
-      selectpesticide.position(140,10)
+      selectpesticide.position(140, 10)
       selectpesticide.mousePressed(() => {
-          currentselected = "pesticide"
+        currentselected = "pesticide"
       })
 
       growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
@@ -174,10 +176,10 @@ function draw() {
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-    
+
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
-   
+
     // Get value of slider to determine daySpeed
 
     if (speedSlider.value() === 0) {
@@ -195,7 +197,7 @@ function draw() {
 
     // Increase the day counter for the text
 
-    dayCounter = Math.floor((angle-180) / 360);
+    dayCounter = Math.floor((angle - 180) / 360);
 
     dayCounterValueElement.html(dayCounter);
 
@@ -205,24 +207,24 @@ function draw() {
 
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
-    
+
     // Draw the island
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     //Draw the watering can 
-    if(currentselected === 'watering_can'){
-      if (mousedown){
-        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+    if (currentselected === 'watering_can') {
+      if (mousedown) {
+        image(watering2, mouseX - 61, mouseY - 60, 200, 200)
       } else {
-        image(watering1,mouseX - 35,mouseY- 66,200,200)
+        image(watering1, mouseX - 35, mouseY - 66, 200, 200)
       }
     }
     //Draw pesticide
-    if(currentselected === 'pesticide'){
+    if (currentselected === 'pesticide') {
       if (mousedown) {
-        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+        image(pesticide2, mouseX - 61, mouseY - 60, 200, 200)
       } else {
-        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+        image(pesticide, mouseX - 35, mouseY - 66, 200, 200);
       }
     }
     // Draw plant related stuff!
@@ -232,10 +234,10 @@ function draw() {
     } else {
       seedHeightAlterer = 0.65
     }
-    
+
     //Draw the island and pot
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000);
-    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500);
+    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000);
+    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500);
 
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
@@ -251,46 +253,47 @@ function draw() {
     }
   }
 }
-function seedDataTitle(){
+
+function seedDataTitle() {
 
   text = createP('seedData');
   text.parent('sketchHolder');
   text.id('seedDataTitle');
 }
 
-function seedDataBody(){
+function seedDataBody() {
   let infoLabel = createP('seedDataBody');
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
   let message = '';
-  if (randNum ==  1){
+  if (randNum == 1) {
     message = 'you have found a generic seed!';
-  } else if (randNum == 2){
+  } else if (randNum == 2) {
     message = 'you have found a pearl seed!';
-  }else if (randNum == 3){
+  } else if (randNum == 3) {
     message = 'you have found a pear seed!';
-    
-  }else if (randNum == 4){
+
+  } else if (randNum == 4) {
     message = 'you have found a ginger seed!';
-    
-  }else if (randNum == 5){
+
+  } else if (randNum == 5) {
     message = 'you have found a coal seed!';
-    
-  }else if (randNum == 6){
+
+  } else if (randNum == 6) {
     message = 'you have found a pebble seed!';
-    
-  }else if (randNum == 7){
+
+  } else if (randNum == 7) {
     message = 'you have found a blood seed!';
 
-  }else if (randNum == 8){
+  } else if (randNum == 8) {
     message = 'you have found a potato seed!';
 
-  infoLabel.html(message + `
+    infoLabel.html(message + `
     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
   `)
 
+  }
 }
-
 
 function loadSeed() {
   randNum = (Math.floor(Math.random() * 8) + 1).toString();
@@ -300,17 +303,17 @@ function loadSeed() {
 }
 
 function drawSeed() {
-  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*seedHeightAlterer - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
+  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
-function windowResized(){
+function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
 function clearCanvas() {
   if (isLogoVisible) {
     isLogoVisible = !(isLogoVisible);
-  } 
+  }
   if (!(isLogoVisible)) {
     image(logoImg, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
     return;
