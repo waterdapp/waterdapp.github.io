@@ -225,10 +225,14 @@ function draw() {
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
       hydrationText.style('color', 'red');
+    } else {
+      hydrationText.style('color', 'white');
     }
 
     if (healthProgress.value() === 0) {
       healthText.style('color', 'red');
+    } else {
+      healthText.style('color', 'white');
     }
   }
 }
