@@ -219,16 +219,8 @@ function draw() {
     drawSeed();
     
     //Draw the island and pot
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
-  }
-}
-
-function seedData(){
-  if (randNum === 1){
-    text = createP('seedData');
-    text.parent('sketchHolder');
-    text.id('seedText');
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000);
+    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500);
 
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
@@ -238,6 +230,14 @@ function seedData(){
     if (healthProgress.value() === 0) {
       healthText.style('color', 'red');
     }
+  }
+}
+
+function seedData(){
+  if (randNum === 1){
+    text = createP('seedData');
+    text.parent('sketchHolder');
+    text.id('seedText');
   }
 }
 
