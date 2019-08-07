@@ -380,13 +380,6 @@ function seedDataTitle() {
 
 function seedDataBody() {
   let message2 = '';
-
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   |
-    //|            |
-   // |____________|
   let infoLabel = createP('seedDataBody');
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
@@ -406,10 +399,10 @@ function seedDataBody() {
 
   } else if (randNum == 6) {
     message = 'you have found a pebble seed!';
-
+    message2 = 'although abundant, pebble seeds can be quite hard <br>to find,as they blend into their most common habitat, <br>shingle beaches.The wood of the pebble tree becomes as<br> hard as stone when left in seawater for five days.'
   } else if (randNum == 7) {
     message = 'you have found a blood seed!';
-
+    message2 = 'The blood seed is widely regarded as Mother Natures <br>most accursed creation, and folk tales tell of blood<br> trees using their branches to skewer unwary travellers.'
   } else if (randNum == 8) {
     message = 'you have found a potato seed!'
     message2 = 'Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?'
@@ -431,8 +424,8 @@ function growPlant(){
   
 }
 function loadSeed() {
-  //randNum = (Math.floor(Math.random() * 8) + 1).toString();
-  randNum = 8
+  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  //randNum = 6
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
@@ -524,3 +517,45 @@ function keyPressed() {
     }
   }
 }
+
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
+   
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
+   
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
+   
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
+   
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
+   
+     //_____________
+   // |            |
+   // |    @    @  |
+   // |    _____   | Meh
+    //|            |
+   // |____________|
