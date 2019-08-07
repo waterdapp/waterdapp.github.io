@@ -8,6 +8,11 @@ let moonPosition = {
   x: window.innerWidth,
   y: window.innerHeight,
 }
+let bugPosition = {
+  x: +500,
+  y: +750,
+}
+//let whichSeed;
 let seedHeightAlterer
 let canvas;
 let value = 0;
@@ -21,6 +26,15 @@ let pot;
 let seedImg, seedImgWidth = 100,
   seedImgHeight = 100,
   seedImgPath;
+
+let clouds = [];
+let cloudImages = [];
+let cloudWidth = 300;
+let cloudHeight = 175;
+const cloudOffset = 60;
+const cloudSizeDifference = 60;
+const cloudNumRow = 4;
+
 let startButton;
 let randNum;
 let isLogoVisible = true;
@@ -37,8 +51,12 @@ let selectpesticide;
 let pesticide2;
 let dayCounter;
 let dayCounterValueElement;
+let bug1;
+let bug2;
 let healthText;
 let hydrationText;
+
+daySpeeds = [0.02, 0.5, 1.0]
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -46,12 +64,19 @@ function preload() {
   moon = loadImage('../src/assets/moon/moon1.png')
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pot = loadImage('../src/assets/pot/pot1.png')
+
+  for (let i = 0; i < 3; i++) {
+    cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
+  }
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
+  bug1 = loadImage('../src/assets/wateringcans/bug1.png');
+  bug2 = loadImage('../src/assets/wateringcans/bug2.png');
   cloud1 = loadImage('../src/assets/clouds/cloud1.png');
   cloud2 = loadImage('../src/assets/clouds/cloud2.png');
   cloud3 = loadImage('../src/assets/clouds/cloud3.png');
@@ -72,12 +97,38 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
-  cloud1.loadPixels();
-  cloud2.loadPixels()
-  cloud3.loadPixels();
+
   pot.loadPixels();
+  bug1.loadPixels();
+  bug2.loadPixels();
   dayCounter = 0;
   roundedDayNumber = 0;
+
+  // Initializing all cloud entities
+  let cloudCount = 0
+  for (let i = 0; i < cloudImages.length; i++) {
+    cloudImages[i].loadPixels();
+    for (let j = 0; j < cloudNumRow; j++) {
+      clouds[cloudCount] = {
+        image: cloudImages[i],
+        position: {
+          x: random(cloudWidth, window.innerWidth-cloudWidth),
+          y: cloudOffset + i * cloudHeight * 1.5 + (random(-35, 35))
+        },
+        speedOffset: random(-2, 2),
+        widthOffset: random(-20, 20),
+        heightOffset: random(-20, 20),
+        width: 0,
+        height: 0
+      }
+
+      clouds[cloudCount].width = cloudWidth - i * cloudSizeDifference + clouds[i].widthOffset;
+      clouds[cloudCount].height = cloudHeight - i * cloudSizeDifference + clouds[i].heightOffset;
+
+      cloudCount++;
+    }
+  }
+
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -183,9 +234,10 @@ function draw() {
     // Get value of slider to determine daySpeed
 
     if (speedSlider.value() === 0) {
-      daySpeed = 0.02;
+      daySpeed = daySpeeds[0]
     } else if (speedSlider.value() === 1) {
       daySpeed = 0.1;
+
     } else if (speedSlider.value() === 2) {
       daySpeed = 0.18;
     }
@@ -199,8 +251,9 @@ function draw() {
 
     dayCounter = Math.floor((angle - 180) / 360);
 
-    dayCounterValueElement.html(dayCounter);
+    // dayCounterValueElement.html(dayCounter);
 
+    cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -208,13 +261,20 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
 
-    // Draw the island
+    //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-
+    // Draw plant related stuff!
+    drawSeed();
+    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
         image(watering2, mouseX - 61, mouseY - 60, 200, 200)
+        hydrationProgress.value(hydrationProgress.value() + 0.5);
+        if (hydrationProgress.value() > 20) {
+          healthProgress.value(healthProgress.value() + 0.2);
+        }
+
       } else {
         image(watering1, mouseX - 35, mouseY - 66, 200, 200)
       }
@@ -222,22 +282,66 @@ function draw() {
     //Draw pesticide
     if (currentselected === 'pesticide') {
       if (mousedown) {
-        image(pesticide2, mouseX - 61, mouseY - 60, 200, 200)
+        image(pesticide2, mouseX - 100, mouseY - 60, 200, 200)
       } else {
-        image(pesticide, mouseX - 35, mouseY - 66, 200, 200);
+        image(pesticide, mouseX - 100, mouseY - 66, 200, 200);
       }
     }
-    // Draw plant related stuff!
-    drawSeed();
+
+    // Draw the clouds
+    for (let i = 0; i < clouds.length; i++) {
+      if (clouds[i].position.x > clouds[i].width || clouds[i].position.x < window.innerWidth + clouds[i].width) {
+        image(clouds[i].image, 
+          clouds[i].position.x, 
+          clouds[i].position.y + cloudBob, 
+          clouds[i].width, 
+          clouds[i].height
+        );
+      }
+    }
+
+    // Calculate clouds position
+    for (let i = 0; i < clouds.length; i++) {
+      // Maximum speed
+      cloudSpeed = map(daySpeed, 0, 0.2, 0, 5) + clouds[i].speedOffset;
+
+      // Decreasing the speed for the smaller clouds
+      cloudSpeed *= map(Math.floor(i/cloudNumRow), 0, 2, 1, 0.3);
+
+
+      // When it is night, the clouds move to the right, and only appear at the back in the morning
+      /* (*) = The condition is true when the sun is at this position
+      _____________
+      |           |
+      |      __*__|
+      |      |    |
+      |__*___|____|
+      */
+      if (
+        (sunPosition.y > window.innerHeight / 2 && sunPosition.x > window.innerWidth/2) ||
+        (sunPosition.y > window.innerHeight && sunPosition.x < window.innerWidth/2)  
+      ) {
+        // Keep moving if they did not get to the end
+        if (clouds[i].position.x < window.innerWidth + clouds[i].width) {
+          clouds[i].position.x += cloudSpeed
+        }
+      } else {
+        // If they get to the end, they appear on the left
+        if (clouds[i].position.x > window.innerWidth + clouds[i].width) {
+          clouds[i].position.x = -clouds[i].width;
+        }
+        clouds[i].position.x += cloudSpeed;
+      }
+    }
+  
     if (randNum == 6 || randNum == 8) {
       seedHeightAlterer = 0.64
     } else {
       seedHeightAlterer = 0.65
     }
+    //Draw bugs
+    image(bug2, bugPosition.x + cos(angle * 0.25) * 300, bugPosition.y + bob, 200, 200)
 
-    //Draw the island and pot
-    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000);
-    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500);
 
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
@@ -251,8 +355,18 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
+
+    // Hidden Day Speed changer by pressing the space bar
+    document.body.onkeydown = function (e) {
+      if (e.keyCode == 32) {
+        console.log("Space Bar Pressed");
+        daySpeedPrompt();
+      }
+    }
   }
+
 }
+
 
 function seedDataTitle() {
 
@@ -342,4 +456,52 @@ function newProgress(x, y, max, id) {
   progress.attribute('max', max);
   progress.id(id);
   return progress;
+}
+
+function daySpeedPrompt() {
+  var daySpeedPromptResult = prompt("Choose a speed from 0.01 to 1", daySpeed);
+  daySpeed = daySpeedPromptResult;
+  daySpeeds[0] = Number(daySpeedPromptResult);
+  speedSlider.value(0);
+}
+
+function keyPressed() {
+  if (keyCode === 50) {
+    currentselected = 'pesticide';
+    if(currentselected === 'pesticide'){
+      if (mousedown) {
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      } else {
+        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+      }
+    }
+  } else if (keyCode === 40) {
+    currentselected = 'pesticide';
+    if(currentselected === 'pesticide'){
+      if (mousedown) {
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      } else {
+        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+      }
+    }
+  }
+  if (keyCode === 49) {
+    currentselected = 'watering_can';
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      } else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+  } else if (keyCode === 35) {
+    currentselected = 'watering_can';
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      } else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+  }
 }
