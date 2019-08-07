@@ -20,7 +20,9 @@ let randNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
-let bob = 0
+let bob = 0;
+let dayCounter;
+let dayCounterValueElement;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -39,6 +41,8 @@ function setup() {
   sun.loadPixels();
   moon.loadPixels();
   island.loadPixels();
+  dayCounter = 0;
+  roundedDayNumber = 0;
   noSmooth();
   canvas.mousePressed(() => {
     if (isLogoVisible) {
@@ -75,6 +79,12 @@ function setup() {
       var hareEmoji = createP('🐇');
       hareEmoji.parent('sketchHolder');
       hareEmoji.id('hareEmoji');
+      text = createP('Days');
+      text.parent('sketchHolder');
+      text.id('daysText');
+      dayCounterValueElement = createP(roundedDayNumber / 1000);
+      dayCounterValueElement.parent('sketchHolder');
+      dayCounterValueElement.id('dayCounterText');
     }
   })
 }
@@ -99,7 +109,7 @@ function draw() {
       }
     }
     if (hydrationProgress.value() < 20) {
-      healthProgress.value(healthProgress.value() - 0.01);
+      healthProgress.value(healthProgress.value() - 0.02);
     }
 
     // Code for orbit and background colour calculation
@@ -122,6 +132,17 @@ function draw() {
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
     bob = sin(angle) * 50
+
+
+    // Increase the day counter for the text
+
+    dayCounter = Math.floor((angle-180) / 360);
+
+      dayCounterValueElement.html(dayCounter);
+
+      console.log(angle);
+    
+
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -137,8 +158,12 @@ function draw() {
     // Draw plant related stuff!
     drawSeed();
 
-    // Check if the speed is slow, medium or fast and show the emojis
 
+    document.body.onkeyup = function(e){
+      if(e.keyCode == 32){
+          daySpeed = 1;
+        }
+      }
   }
 }
 
