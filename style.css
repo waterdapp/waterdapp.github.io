@@ -105,6 +105,14 @@ progress {
     font-size: 15px;
     left: 50px;
 }
+#seedText{
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: green;
+    bottom: -50px;
+    font-size: 15px;
+    left: -5px;
+}
 
 #growthText {
     font-family: 'Press Start 2P', cursive;
