@@ -105,13 +105,22 @@ progress {
     font-size: 15px;
     left: 50px;
 }
-#seedText{
+#seedDataTitle{
     font-family: 'Press Start 2P', cursive;
     position: absolute;
-    color: green;
-    bottom: -50px;
+    color: white;
+    top: 30px;
     font-size: 15px;
-    left: -5px;
+    right: 75px;
+}
+#seedDataBody{
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    color: white;
+    top: 40px;
+    font-size: 15px;
+    right: 75px;
+
 }
 
 #growthText {

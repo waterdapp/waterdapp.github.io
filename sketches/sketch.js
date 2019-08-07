@@ -9,7 +9,7 @@ let moonPosition = {
   x: window.innerWidth,
   y: window.innerHeight,
 }
-//let whichSeed;
+let seedHeightAlterer
 let canvas;
 let value = 0;
 let img;
@@ -99,6 +99,8 @@ function setup() {
       dayCounterValueElement = createP(roundedDayNumber / 1000);
       dayCounterValueElement.parent('sketchHolder');
       dayCounterValueElement.id('dayCounterText');
+
+      seedDataBody();
     }
   })
 }
@@ -153,8 +155,6 @@ function draw() {
     dayCounter = Math.floor((angle-180) / 360);
 
       dayCounterValueElement.html(dayCounter);
-
-      console.log(angle);
     
 
     //maths for daylight cycle
@@ -166,6 +166,11 @@ function draw() {
     
     // Draw plant related stuff!
     drawSeed();
+    if (randNum == 6 || randNum == 8) {
+      seedHeightAlterer = 0.64
+    } else {
+      seedHeightAlterer = 0.65
+    }
     
     //Draw the island and pot
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
@@ -174,18 +179,45 @@ function draw() {
 
   }
 }
-function seedData(){
-  if (randNum === 1){
-    text = createP('seedData');
-    text.parent('sketchHolder');
-    text.id('seedText');
+function seedDataTitle(){
 
-    document.body.onkeyup = function(e){
-      if(e.keyCode == 32){
-          daySpeed = 1;
-        }
-      }
+  text = createP('seedData');
+  text.parent('sketchHolder');
+  text.id('seedDataTitle');
+}
+
+function seedDataBody(){
+  let infoLabel = createP('seedDataBody');
+  infoLabel.parent('sketchHolder');
+  infoLabel.id('seedDataBody');
+  let message = '';
+  if (randNum ==  1){
+    message = 'you have found a generic seed!';
+  } else if (randNum == 2){
+    message = 'you have found a pearl seed!';
+  }else if (randNum == 3){
+    message = 'you have found a pear seed!';
+    
+  }else if (randNum == 4){
+    message = 'you have found a ginger seed!';
+    
+  }else if (randNum == 5){
+    message = 'you have found a coal seed!';
+    
+  }else if (randNum == 6){
+    message = 'you have found a pebble seed!';
+    
+  }else if (randNum == 7){
+    message = 'you have found a blood seed!';
+
+  }else if (randNum == 8){
+    message = 'you have found a potato seed!';
   }
+
+  infoLabel.html(message + `
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
+  `)
+
 }
 
 
@@ -197,7 +229,7 @@ function loadSeed() {
 }
 
 function drawSeed() {
-  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.65 - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
+  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*seedHeightAlterer - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
 function windowResized(){
