@@ -9,8 +9,8 @@ let moonPosition = {
   y: window.innerHeight,
 }
 let bugPosition = {
-  x: +1100,
-  y: +750,
+  x: (window.innerWidth / 2)- 150,
+  y: (window.innerHeight / 2)+ 140,
 }
 //let whichSeed;
 let seedHeightAlterer
@@ -22,11 +22,9 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
+let seedImg, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let plantMaterial, plantMaterialPath;
 let pot;
-let seedImg, seedImgWidth = 100,
-  seedImgHeight = 100,
-  seedImgPath;
-
 let clouds = [];
 let cloudImages = [];
 let cloudWidth = 300;
@@ -40,6 +38,7 @@ let randNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
+let sliderText;
 let bob = 0
 let watering1;
 let watering2;
@@ -53,10 +52,17 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
-let healthText;
-let hydrationText;
 let bugpesticidecollision = false 
-daySpeeds = [0.02, 0.5, 1.0]
+let healthText, hydrationText, speedText, seedText, growthText, daysText;
+
+daySpeeds = [0.02, 0.1, 0.18];
+growthSpeeds = [0.5, 1, 2];
+
+let angleSlider, treeAngle; 
+let growthValue = 0, growthSpeed = 0;
+let plantThickness = 8;
+
+let gameTime = 0;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -71,6 +77,7 @@ function preload() {
 
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
+  plantMaterial = loadPlantMaterial();
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
@@ -168,16 +175,16 @@ function setup() {
       hydrationText = createP('Hydration');
       hydrationText.parent('sketchHolder');
       hydrationText.id('hydrationText');
-      text = createP('Speed');
-      text.parent('sketchHolder');
-      text.id('speedText');
-      text = createP('seedData');
-      text.parent('sketchHolder');
-      text.id('seedText');
+      speedText = createP('Speed');
+      speedText.parent('sketchHolder');
+      speedText.id('speedText');
+      seedText = createP('seedData');
+      seedText.parent('sketchHolder');
+      seedText.id('seedText');
 
-      text = createP('Growth');
-      text.parent('sketchHolder');
-      text.id('growthText');
+      growthText = createP('Growth');
+      growthText.parent('sketchHolder');
+      growthText.id('growthText');
       var snailEmoji = createP('🐌');
       snailEmoji.parent('sketchHolder');
       snailEmoji.id('snailEmoji');
@@ -187,9 +194,9 @@ function setup() {
       var hareEmoji = createP('🐇');
       hareEmoji.parent('sketchHolder');
       hareEmoji.id('hareEmoji');
-      text = createP('Days');
-      text.parent('sketchHolder');
-      text.id('daysText');
+      daysText = createP('Days');
+      daysText.parent('sketchHolder');
+      daysText.id('daysText');
       dayCounterValueElement = createP(roundedDayNumber / 1000);
       dayCounterValueElement.parent('sketchHolder');
       dayCounterValueElement.id('dayCounterText');
@@ -223,6 +230,18 @@ function draw() {
     if (hydrationProgress.value() < 20) {
       healthProgress.value(healthProgress.value() - 0.02);
     }
+    //increment plant growth state according to speed setting
+    if (frameCount % (60 * (2.5 - growthSpeed)) === 0) {
+      if (growthValue <= 200) {
+        growthValue += 2;
+        plantThickness += 1/25;
+      }
+      // start shrinking seed after certain amount of growth
+      if ((growthValue >= 20) && (growthValue <= 80)) {
+        seedImgWidth -= 8;
+        seedImgHeight -= 8;
+      }
+    }
 
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
@@ -232,16 +251,8 @@ function draw() {
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
     // Get value of slider to determine daySpeed
-
-    if (speedSlider.value() === 0) {
-      daySpeed = daySpeeds[0]
-    } else if (speedSlider.value() === 1) {
-      daySpeed = 0.1;
-
-    } else if (speedSlider.value() === 2) {
-      daySpeed = 0.18;
-    }
-
+    daySpeed = daySpeeds[speedSlider.value()]
+    growthSpeed = growthSpeeds[speedSlider.value()]
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
     bob = sin(angle) * 50
@@ -263,8 +274,18 @@ function draw() {
 
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-    // Draw plant related stuff!
-    drawSeed();
+    //Draw plant related stuff!
+    //treeAngle = angleSlider.value();
+    treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
+    push();
+    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 -100 + bob);
+    branch(growthValue);
+    pop();
+
+    // seed disappears when it is small enough
+    if (seedImgWidth > 60) {
+      drawSeed();
+    }
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
     if (currentselected === 'watering_can') {
@@ -419,14 +440,39 @@ function growPlant(){
   
 }
 function loadSeed() {
-  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  randNum = (Math.floor(Math.random() * 9)).toString();
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
 }
-
 function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+}
+
+function loadPlantMaterial() {
+  randNum = (Math.floor(Math.random() * 9)).toString();
+  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randNum, '.png');
+
+  return loadImage(plantMaterialPath);
+}
+
+// Draw plant
+function branch(len) {
+  let bob = sin(angle * 0.3) * 50;
+  noStroke();
+  fill(60, 161, 35);
+  image(plantMaterial, 0, 0, plantThickness, -len);
+  translate(0, -len);
+  if (len > 10) {
+  push();
+  rotate(treeAngle+(bob/3200));
+  branch(len * 0.75)
+  pop();
+  push();
+  rotate(-treeAngle+(bob/1600));
+  branch(len * 0.75)
+  pop();
+  }
 }
 
 function windowResized() {
