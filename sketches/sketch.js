@@ -165,7 +165,17 @@ function draw() {
 
 
       // When it is night, the clouds move to the right, and only appear at the back in the morning
-      if (sunPosition.y > window.innerHeight / 2) {
+      /* (*) = The condition is true when the sun is at this position
+      _____________
+      |           |
+      |      __*__|
+      |      |    |
+      |__*___|____|
+      */
+      if (
+        (sunPosition.y > window.innerHeight / 2 && sunPosition.x > window.innerWidth/2) ||
+        (sunPosition.y > window.innerHeight && sunPosition.x < window.innerWidth/2)  
+      ) {
         // Keep moving if they did not get to the end
         if (clouds[i].position.x < window.innerWidth + clouds[i].width) {
           clouds[i].position.x += cloudSpeed
