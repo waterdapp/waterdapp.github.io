@@ -1,7 +1,7 @@
 /* Add the pixel font using: [font-family: 'Press Start 2P', cursive;] */
 
 body {
-    margin:0;
+    margin: 0px;
     padding:0;
     overflow: hidden;
 }
@@ -72,7 +72,7 @@ progress {
 }
 
 #healthText {
-    top: 50%;
+    top: 47%;
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
@@ -85,7 +85,7 @@ progress {
 }
 
 #hydrationText {
-    top: 50%;
+    top: 47%;
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
@@ -101,10 +101,11 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    bottom: 95px;
+    bottom: 135px;
     font-size: 15px;
     left: 50px;
 }
+
 #seedDataTitle{
     font-family: 'Press Start 2P', cursive;
     position: absolute;
@@ -113,6 +114,7 @@ progress {
     font-size: 15px;
     right: 75px;
 }
+
 #seedDataBody{
     font-family: 'Press Start 2P', cursive;
     position: absolute;
@@ -120,41 +122,40 @@ progress {
     top: 40px;
     font-size: 15px;
     right: 75px;
-
 }
 
 #growthText {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    bottom: 65px;
+    bottom: 115px;
     left: 275px;
 }
 
 #snailEmoji {
     position: absolute;
     font-size: 17px;
-    bottom: 55px;
+    bottom: 100px;
     left: 45px;
 }
 
 #personEmoji {
     position: absolute;
     font-size: 17px;
-    bottom: 55px;
+    bottom: 100px;
     left: 80px;
 }
 
 #hareEmoji {
     position: absolute;
     font-size: 17px;
-    bottom: 55px;
+    bottom: 100px;
     left: 110px;
 }
 
 #daysText {
     position: absolute;
-    bottom: 65px;
+    bottom: 100px;
     right: 70px;
     font-family: 'Press Start 2P', cursive;
     color: white;
@@ -162,7 +163,7 @@ progress {
 
 #dayCounterText {
     position: absolute;
-    bottom: 15px;
+    bottom: 60px;
     right: 90px;
     font-family: 'Press Start 2P', cursive;
     color: white;
