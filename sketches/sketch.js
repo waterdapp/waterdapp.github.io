@@ -52,7 +52,7 @@ function setup() {
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
       growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
-      hydrationProgress.value(19)
+      growthProgress.value(0);
       // Setup both bars.
       text = createP('Health');
       text.parent('sketchHolder');
