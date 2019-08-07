@@ -9,7 +9,7 @@ let moonPosition = {
   y: window.innerHeight,
 }
 let bugPosition = {
-  x: +500,
+  x: +1100,
   y: +750,
 }
 //let whichSeed;
@@ -340,7 +340,7 @@ function draw() {
       seedHeightAlterer = 0.65
     }
     //Draw bugs
-    image(bug2, bugPosition.x + cos(angle * 0.25) * 300, bugPosition.y + bob, 200, 200)
+    image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
 
 
     // Make the text color red if hydration or health values are red
