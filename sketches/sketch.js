@@ -8,6 +8,10 @@ let moonPosition = {
   x: window.innerWidth,
   y: window.innerHeight,
 }
+let bugPosition = {
+  x: +500,
+  y: +750,
+}
 //let whichSeed;
 let canvas;
 let value = 0;
@@ -32,6 +36,8 @@ let selectpesticide;
 let pesticide2;
 let dayCounter;
 let dayCounterValueElement;
+let bug1;
+let bug2;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -45,6 +51,8 @@ function preload() {
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
+  bug1 = loadImage('../src/assets/wateringcans/bug1.png');      
+  bug2 = loadImage('../src/assets/wateringcans/bug2.png');
 };
 
 
@@ -63,6 +71,8 @@ function setup() {
   pesticide.loadPixels();
   pesticide2.loadPixels();
   pot.loadPixels();
+  bug1.loadPixels();
+  bug2.loadPixels();
   dayCounter = 0;
   roundedDayNumber = 0;
   noSmooth();
@@ -185,7 +195,7 @@ function draw() {
 
     dayCounter = Math.floor((angle-180) / 360);
 
-    dayCounterValueElement.html(dayCounter);
+    // dayCounterValueElement.html(dayCounter);
 
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
@@ -193,33 +203,49 @@ function draw() {
 
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
-    
+       
+
     // Draw the island
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
-    //Draw the watering can 
-    if(currentselected === 'watering_can'){
-      if (mousedown){
-        image(watering2,mouseX - 61,mouseY- 60,200,200)  
-      } else {
-        image(watering1,mouseX - 35,mouseY- 66,200,200)
-      }
-    }
-    //Draw pesticide
-    if(currentselected === 'pesticide'){
-      if (mousedown) {
-        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
-      } else {
-        image(pesticide,mouseX - 35,mouseY- 66,200,200);
-      }
-    }
     // Draw plant related stuff!
     drawSeed();
     
     //Draw the island and pot
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
     image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+ //Draw the watering can 
+ if(currentselected === 'watering_can'){
+  if (mousedown){
+    image(watering2,mouseX - 61,mouseY- 60,200,200)
+    hydrationProgress.value(hydrationProgress.value() + 0.5);
+    if (hydrationProgress.value() > 20) {
+      healthProgress.value(healthProgress.value() + 0.2);
+    }
+
+  } 
+  else {
+    image(watering1,mouseX - 35,mouseY- 66,200,200)
   }
+}
+//Draw pesticide
+if(currentselected === 'pesticide'){
+  if (mousedown) {
+    image(pesticide2,mouseX - 100,mouseY- 60,200,200) 
+  } 
+  else {
+    image(pesticide,mouseX - 100,mouseY- 66,200,200);
+  }
+}
+// Draw plant related stuff!
+drawSeed();
+    //Draw bugs
+ image(bug2,bugPosition.x+cos(angle*0.25)*300,bugPosition.y+ bob,200,200)
+   }
+}
+
+function moveBug(){
+
 }
 
 function seedData(){
