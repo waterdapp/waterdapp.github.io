@@ -54,7 +54,7 @@ let bug1;
 let bug2;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
-daySpeeds = [0.02, 0.5, 1.0];
+daySpeeds = [0.02, 0.1, 0.18];
 growthSpeeds = [0.5, 1, 2];
 
 let angleSlider, treeAngle; 
