@@ -333,7 +333,6 @@ function draw() {
         clouds[i].position.x += cloudSpeed;
       }
     }
-    
   
     if (randNum == 6 || randNum == 8) {
       seedHeightAlterer = 0.64
@@ -461,4 +460,45 @@ function daySpeedPrompt() {
   daySpeed = daySpeedPromptResult;
   daySpeeds[0] = Number(daySpeedPromptResult);
   speedSlider.value(0);
+}
+
+function keyPressed() {
+  if (keyCode === 50) {
+    currentselected = 'pesticide';
+    if(currentselected === 'pesticide'){
+      if (mousedown) {
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      } else {
+        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+      }
+    }
+  } else if (keyCode === 40) {
+    currentselected = 'pesticide';
+    if(currentselected === 'pesticide'){
+      if (mousedown) {
+        image(pesticide2,mouseX - 61,mouseY- 60,200,200) 
+      } else {
+        image(pesticide,mouseX - 35,mouseY- 66,200,200);
+      }
+    }
+  }
+  if (keyCode === 49) {
+    currentselected = 'watering_can';
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      } else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+  } else if (keyCode === 35) {
+    currentselected = 'watering_can';
+    if(currentselected === 'watering_can'){
+      if (mousedown){
+        image(watering2,mouseX - 61,mouseY- 60,200,200)  
+      } else {
+        image(watering1,mouseX - 35,mouseY- 66,200,200)
+      }
+    }
+  }
 }
