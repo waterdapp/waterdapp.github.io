@@ -32,6 +32,8 @@ let selectpesticide;
 let pesticide2;
 let dayCounter;
 let dayCounterValueElement;
+let healthText;
+let hydrationText;
 
 function preload() {
   img = loadImage('../src/branding/logo.png');
@@ -98,12 +100,12 @@ function setup() {
       growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
       growthProgress.value(0);
       // Setup both bars.
-      text = createP('Health');
-      text.parent('sketchHolder');
-      text.id('healthText');
-      text = createP('Hydration');
-      text.parent('sketchHolder');
-      text.id('hydrationText');
+      healthText = createP('Health');
+      healthText.parent('sketchHolder');
+      healthText.id('healthText');
+      hydrationText = createP('Hydration');
+      hydrationText.parent('sketchHolder');
+      hydrationText.id('hydrationText');
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
@@ -228,11 +230,14 @@ function seedData(){
     text.parent('sketchHolder');
     text.id('seedText');
 
-    document.body.onkeyup = function(e){
-      if(e.keyCode == 32){
-          daySpeed = 1;
-        }
-      }
+    // Make the text color red if hydration or health values are red
+    if (hydrationProgress.value() === 0) {
+      hydrationText.style('color', 'red');
+    }
+
+    if (healthProgress.value() === 0) {
+      healthText.style('color', 'red');
+    }
   }
 }
 
