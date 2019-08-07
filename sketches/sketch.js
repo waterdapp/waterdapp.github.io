@@ -9,12 +9,14 @@ let moonPosition = {
   x: window.innerWidth,
   y: window.innerHeight,
 }
+//let whichSeed;
 let canvas;
 let value = 0;
 let img;
 let moon;
 let sun;
-let seedImg, seedImgWidth = 250, seedImgHeight = 250, seedImgPath;
+let pot;
+let seedImg, seedImgWidth = 100, seedImgHeight = 100, seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
@@ -27,18 +29,23 @@ function preload() {
   sun = loadImage('../src/assets/sun/Sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
+  pot = loadImage('../src/assets/pot/pot1.png')
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
 };
 
+
+
+
 function setup() {
   // create a canvas
-  canvas = createCanvas(window.innerWidth, window.innerHeight); //origional blue rgb values are 0, 160, 250
+  canvas = createCanvas(window.innerWidth, window.innerHeight); 
   canvas.parent('sketchHolder')
   img.loadPixels();
   sun.loadPixels();
   moon.loadPixels();
   island.loadPixels();
+  pot.loadPixels();
   noSmooth();
   canvas.mousePressed(() => {
     if (isLogoVisible) {
@@ -62,6 +69,10 @@ function setup() {
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
+      
+      text = createP('seedData');
+      text.parent('sketchHolder');
+      text.id('seedText');
     }
   })
 }
@@ -103,13 +114,22 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
-    //Draw the island
-    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-
-    
-    
     // Draw plant related stuff!
     drawSeed();
+    
+    //Draw the island and pot
+    image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+    image(pot,window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+    
+
+  }
+}
+function seedData(){
+  if (randNum === 1){
+    text = createP('seedData');
+    text.parent('sketchHolder');
+    text.id('seedText');
+
   }
 }
 
@@ -122,7 +142,7 @@ function loadSeed() {
 }
 
 function drawSeed() {
-  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.75 - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
+  image(seedImg, window.innerWidth/2 -100 - seedImgWidth/2, window.innerHeight*0.65 - seedImgHeight/2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
 function windowResized(){
