@@ -26,6 +26,15 @@ let pot;
 let seedImg, seedImgWidth = 100,
   seedImgHeight = 100,
   seedImgPath;
+
+let clouds = [];
+let cloudImages = [];
+let cloudWidth = 300;
+let cloudHeight = 175;
+const cloudOffset = 60;
+const cloudSizeDifference = 60;
+const cloudNumRow = 4;
+
 let startButton;
 let randNum;
 let isLogoVisible = true;
@@ -55,6 +64,11 @@ function preload() {
   moon = loadImage('../src/assets/moon/moon1.png')
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pot = loadImage('../src/assets/pot/pot1.png')
+
+  for (let i = 0; i < 3; i++) {
+    cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
+  }
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   seedImg = loadSeed();
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
@@ -83,14 +97,38 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
-  cloud1.loadPixels();
-  cloud2.loadPixels()
-  cloud3.loadPixels();
+
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
   dayCounter = 0;
   roundedDayNumber = 0;
+
+  // Initializing all cloud entities
+  let cloudCount = 0
+  for (let i = 0; i < cloudImages.length; i++) {
+    cloudImages[i].loadPixels();
+    for (let j = 0; j < cloudNumRow; j++) {
+      clouds[cloudCount] = {
+        image: cloudImages[i],
+        position: {
+          x: random(cloudWidth, window.innerWidth-cloudWidth),
+          y: cloudOffset + i * cloudHeight * 1.5 + (random(-35, 35))
+        },
+        speedOffset: random(-2, 2),
+        widthOffset: random(-20, 20),
+        heightOffset: random(-20, 20),
+        width: 0,
+        height: 0
+      }
+
+      clouds[cloudCount].width = cloudWidth - i * cloudSizeDifference + clouds[i].widthOffset;
+      clouds[cloudCount].height = cloudHeight - i * cloudSizeDifference + clouds[i].heightOffset;
+
+      cloudCount++;
+    }
+  }
+
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -215,6 +253,7 @@ function draw() {
 
     // dayCounterValueElement.html(dayCounter);
 
+    cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
     sunPosition.x = cos(radians(angle)) * window.innerWidth / 2 + window.innerWidth / 2
     sunPosition.y = sin(radians(angle)) * window.innerHeight + window.innerHeight
@@ -249,6 +288,53 @@ function draw() {
       }
     }
 
+    // Draw the clouds
+    for (let i = 0; i < clouds.length; i++) {
+      if (clouds[i].position.x > clouds[i].width || clouds[i].position.x < window.innerWidth + clouds[i].width) {
+        image(clouds[i].image, 
+          clouds[i].position.x, 
+          clouds[i].position.y + cloudBob, 
+          clouds[i].width, 
+          clouds[i].height
+        );
+      }
+    }
+
+    // Calculate clouds position
+    for (let i = 0; i < clouds.length; i++) {
+      // Maximum speed
+      cloudSpeed = map(daySpeed, 0, 0.2, 0, 5) + clouds[i].speedOffset;
+
+      // Decreasing the speed for the smaller clouds
+      cloudSpeed *= map(Math.floor(i/cloudNumRow), 0, 2, 1, 0.3);
+
+
+      // When it is night, the clouds move to the right, and only appear at the back in the morning
+      /* (*) = The condition is true when the sun is at this position
+      _____________
+      |           |
+      |      __*__|
+      |      |    |
+      |__*___|____|
+      */
+      if (
+        (sunPosition.y > window.innerHeight / 2 && sunPosition.x > window.innerWidth/2) ||
+        (sunPosition.y > window.innerHeight && sunPosition.x < window.innerWidth/2)  
+      ) {
+        // Keep moving if they did not get to the end
+        if (clouds[i].position.x < window.innerWidth + clouds[i].width) {
+          clouds[i].position.x += cloudSpeed
+        }
+      } else {
+        // If they get to the end, they appear on the left
+        if (clouds[i].position.x > window.innerWidth + clouds[i].width) {
+          clouds[i].position.x = -clouds[i].width;
+        }
+        clouds[i].position.x += cloudSpeed;
+      }
+    }
+    
+  
     if (randNum == 6 || randNum == 8) {
       seedHeightAlterer = 0.64
     } else {
