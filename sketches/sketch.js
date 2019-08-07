@@ -18,7 +18,7 @@ let seedImg, seedImgWidth = 250, seedImgHeight = 250, seedImgPath;
 let startButton;
 let randNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress;
+let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
 let bob = 0
 
@@ -51,6 +51,7 @@ function setup() {
       // Add health and hydration progress bars
       healthProgress = newProgress(-100, canvas.height / 2, '100', 'healthProgress');
       hydrationProgress = newProgress(canvas.width - 150, canvas.height / 2, '100', 'hydrationProgress');
+      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
 
       // Setup both bars.
       text = createP('Health');
@@ -62,6 +63,18 @@ function setup() {
       text = createP('Speed');
       text.parent('sketchHolder');
       text.id('speedText');
+      text = createP('Growth');
+      text.parent('sketchHolder');
+      text.id('growthText');
+      var snailEmoji = createP('🐌');
+      snailEmoji.parent('sketchHolder');
+      snailEmoji.id('snailEmoji');
+      var personEmoji = createP('🚶');
+      personEmoji.parent('sketchHolder');
+      personEmoji.id('personEmoji');
+      var hareEmoji = createP('🐇');
+      hareEmoji.parent('sketchHolder');
+      hareEmoji.id('hareEmoji');
     }
   })
 }
@@ -72,8 +85,18 @@ function draw() {
   }
   if (!isLogoVisible) {
     // Every other second run this
-    if (frameCount % 60 === 0) {
-      hydrationProgress.value(hydrationProgress.value() - 1);
+    if (daySpeed === 0.1) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1);
+      }
+    } else if (daySpeed === 0.02) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 0.2);
+      }
+    } else if (daySpeed === 0.18) {
+      if (frameCount % 60 === 0) {
+        hydrationProgress.value(hydrationProgress.value() - 1.8);
+      }
     }
 
     // Code for orbit and background colour calculation
@@ -103,13 +126,16 @@ function draw() {
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
     
-    //Draw the island
+    // Draw the island
     image(island,window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     
     
     // Draw plant related stuff!
     drawSeed();
+
+    // Check if the speed is slow, medium or fast and show the emojis
+
   }
 }
 
