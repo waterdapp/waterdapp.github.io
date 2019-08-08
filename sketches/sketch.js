@@ -17,7 +17,7 @@ let seedHeightAlterer
 let canvas;
 let value = 0;
 
-let money = 0;
+let fruitsPickedUp = 0;
 let coinImage;
 
 let img;
@@ -210,7 +210,7 @@ function setup() {
       })
 
 
-      coinElement = createP('<img width="100" height="100" src="../src/assets/coins/coin.png"> <span id="moneyDisplay">'+ money + '</span>');
+      coinElement = createP('<img width="100" height="100" src="../src/assets/coins/coin.png"> <span id="moneyDisplay">'+ fruitsPickedUp + '</span>');
       coinElement.position(10, 120);
 
       growthProgress = newProgress(150, canvas.height - 50, growthMax, 'growthProgress');
@@ -486,7 +486,7 @@ function draw() {
     if (healthProgress.value() === 0) {
       if (endReached === 'no') {
         endReached = 'yes';
-        endDayScore = dayCounter;
+        endDayScore = dayCounter + fruitsPickedUp;
         endOfGame();
       }
     }
