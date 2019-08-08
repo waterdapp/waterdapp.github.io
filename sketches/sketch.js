@@ -32,6 +32,8 @@ let cloudHeight = 175;
 const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
+let endDayScore;
+var endReached = 'no';
 
 let startButton;
 let randNum;
@@ -385,6 +387,17 @@ function draw() {
     // Set the growth bar to the current growth level
 
     growthProgress.value(growthValue);
+
+    // End Screen
+    
+    if (healthProgress.value() === 0) {
+      if (endReached === 'no') {
+        endReached = 'yes';
+        endDayScore = dayCounter;
+        alert('Your plant has died. Thanks for playing! You kept your plant alive for ' + endDayScore + ' days.');
+        endOfGame();
+      }
+    }
   }
 
 }
