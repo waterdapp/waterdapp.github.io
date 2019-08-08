@@ -285,44 +285,6 @@ function draw() {
 
       moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
       moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
-
-      //Draw the island and pot
-      image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-      //Draw plant related stuff!
-      //treeAngle = angleSlider.value();
-      treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
-      push();
-      translate(window.innerWidth / 2 - seedImgWidthOriginal / 2 + 30, window.innerHeight * 0.75 - seedImgHeightOriginal / 2 - 100 + bob);
-      branch(growthValue);
-      pop();
-
-      // seed disappears when it is small enough
-      if (seedImgWidth > 60) {
-        drawSeed();
-      }
-      image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
-      //Draw the watering can 
-      if (currentselected === 'watering_can') {
-        if (mousedown) {
-          image(watering2, mouseX - 61, mouseY - 60, 200, 200)
-          hydrationProgress.value(hydrationProgress.value() + 0.5);
-          if (hydrationProgress.value() > 20) {
-            healthProgress.value(healthProgress.value() + 0.2);
-          }
-
-        } else {
-          image(watering1, mouseX - 35, mouseY - 66, 200, 200)
-        }
-      }
-      //Draw pesticide
-      if (currentselected === 'pesticide') {
-        if (mousedown) {
-          image(pesticide2, mouseX - 100, mouseY - 60, 200, 200)
-        } else {
-          image(pesticide, mouseX - 100, mouseY - 66, 200, 200);
-        }
-      }
-
       // Draw the clouds
       for (let i = 0; i < clouds.length; i++) {
         if (clouds[i].position.x > clouds[i].width || clouds[i].position.x < window.innerWidth + clouds[i].width) {
@@ -374,6 +336,17 @@ function draw() {
       } else {
         seedHeightAlterer = 0.65
       }
+
+
+      //Draw the island and pot
+      image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+      //Draw plant related stuff!
+      //treeAngle = angleSlider.value();
+      treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
+      push();
+      translate(window.innerWidth / 2 - seedImgWidthOriginal / 2 + 30, window.innerHeight * 0.75 - seedImgHeightOriginal / 2 - 100 + bob);
+      branch(growthValue);
+      pop();
       //Draw bugs
       if (showbug) {
         image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
@@ -388,6 +361,33 @@ function draw() {
           }
         }
       }
+      // seed disappears when it is small enough
+      if (seedImgWidth > 60) {
+        drawSeed();
+      }
+      image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+      //Draw the watering can 
+      if (currentselected === 'watering_can') {
+        if (mousedown) {
+          image(watering2, mouseX - 61, mouseY - 61, 200, 200)
+          hydrationProgress.value(hydrationProgress.value() + 0.5);
+          if (hydrationProgress.value() > 20) {
+            healthProgress.value(healthProgress.value() + 0.2);
+          }
+
+        } else {
+          image(watering1, mouseX - 35, mouseY - 66, 200, 200)
+        }
+      }
+      //Draw pesticide
+      if (currentselected === 'pesticide') {
+        if (mousedown) {
+          image(pesticide2, mouseX - 100, mouseY - 60, 200, 200)
+        } else {
+          image(pesticide, mouseX - 100, mouseY - 66, 200, 200);
+        }
+      }
+
 
       // Make the text color red if hydration or health values are red
       if (hydrationProgress.value() === 0) {
