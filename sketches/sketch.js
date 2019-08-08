@@ -70,6 +70,8 @@ let plantThickness = 8;
 
 let gameTime = 0;
 
+let themeMusic;
+
 function preload() {
   img = loadImage('../src/branding/Logo.png');
   sun = loadImage('../src/assets/sun/sun1.png');
@@ -100,6 +102,13 @@ function preload() {
   cloud1 = loadImage('../src/assets/clouds/cloud1.png');
   cloud2 = loadImage('../src/assets/clouds/cloud2.png');
   cloud3 = loadImage('../src/assets/clouds/cloud3.png');
+
+  //Music section
+  //set global sound formats
+  soundFormats('mp3', 'ogg');
+
+  //load theme as .ogg or .mp3 depending on browser
+  themeMusic = loadSound('../src/music/theme.mp3');
 };
 
 
@@ -146,7 +155,9 @@ function setup() {
       cloudCount++;
     }
   }
-
+  // play theme music
+  themeMusic.setVolume(0.1);
+  themeMusic.play();
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -155,6 +166,9 @@ function setup() {
     if (isLogoVisible) {
       // Flip the value of logo visible
       isLogoVisible = !(isLogoVisible);
+
+      //stop playing theme
+      //themeMusic.stop();
 
       // Add the time slider
       speedSlider = newSlider(40, canvas.height - 50);
@@ -495,6 +509,10 @@ function branch(len) {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  // fix positioning error when window resized
+  hydrationProgress.position(canvas.width - 150, canvas.height / 2);
+  speedSlider.position(40, canvas.height - 50);
+  growthProgress.position(200, canvas.height - 50);
 }
 
 function clearCanvas() {
