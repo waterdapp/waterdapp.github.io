@@ -22,10 +22,8 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
-let seedImg, seed, seedImgWidth = seedImgWidthOriginal = 250,
-  seedImgHeight = seedImgHeightOriginal = 250,
-  seedImgPath;
-let plantMaterial, plantMaterialPath;
+let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let plantMaterial, plantMaterialPath, leafMaterialPath, leafMaterial;
 let pot;
 let clouds = [];
 let cloudImages = [];
@@ -44,7 +42,7 @@ let startButton;
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress, growthProgress;
+let hydrationProgress, healthProgress, growthProgress, growthMax = 130;
 let speedSlider;
 let sliderText;
 let bob = 0
@@ -97,8 +95,11 @@ function preload() {
   seed = new Seed(floor(random(1, 8)));
 
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-  seedImg = loadSeed();
+  seedImg = seed.image;
   plantMaterial = seed.loadPlantMaterial();
+
+  leafMaterial = loadLeafMaterial();
+
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
@@ -199,7 +200,7 @@ function setup() {
         currentselected = "pesticide"
       })
 
-      growthProgress = newProgress(200, canvas.height - 50, 200, 'growthProgress');
+      growthProgress = newProgress(150, canvas.height - 50, growthMax, 'growthProgress');
       growthProgress.value(growthValue);
       // Setup both bars.
       healthText = createP('Health');
@@ -275,7 +276,7 @@ function draw() {
     }
     //increment plant growth state according to speed setting
     if (frameCount % (60 * (2.5 - growthSpeed)) === 0) {
-      if (growthValue <= 200) {
+      if (growthValue <= growthMax) {
         growthValue += 2;
         plantThickness += 1 / 25;
       }
@@ -394,16 +395,6 @@ function draw() {
       seedHeightAlterer = 0.65
     }
 
-
-    //Draw the island and pot
-    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
-    //Draw plant related stuff!
-    //treeAngle = angleSlider.value();
-    treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
-    push();
-    translate(window.innerWidth / 2 - seedImgWidthOriginal / 2 + 30, window.innerHeight * 0.75 - seedImgHeightOriginal / 2 - 100 + bob);
-    branch(growthValue);
-    pop();
     //Draw bugs
     if (showbug) {
       image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
@@ -545,19 +536,23 @@ function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
-function loadPlantMaterial() {
+function loadLeafMaterial() {
   randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
-  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
+  leafMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
 
-  return loadImage(plantMaterialPath);
+  return loadImage(leafMaterialPath);
 }
+
 
 // Draw plant
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
-  noStroke();
-  fill(60, 161, 35);
-  image(plantMaterial, 0, 0, plantThickness, -len);
+  if (len > 10) {
+    image(plantMaterial, 0, 0, plantThickness, -len);
+  } else if (len <= 10) {
+    // draws the material at the end of the branch; hopefully you can replace with fruit image
+    image(leafMaterial, 0, 0, plantThickness, -len);
+  }
   translate(0, -len);
   if (len > 10) {
     push();
