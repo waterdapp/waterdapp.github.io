@@ -37,7 +37,8 @@ let seedsImages = [];
 let fruitsImages = [];
 
 let startButton;
-let randNum;
+let randSeedNum;
+let randStickNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
@@ -55,6 +56,7 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
+let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
 daySpeeds = [0.02, 0.1, 0.18];
@@ -110,7 +112,6 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
-
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -137,7 +138,6 @@ function setup() {
 
       clouds[cloudCount].width = cloudWidth - i * cloudSizeDifference + clouds[i].widthOffset;
       clouds[cloudCount].height = cloudHeight - i * cloudSizeDifference + clouds[i].heightOffset;
-
       cloudCount++;
     }
   }
@@ -172,8 +172,8 @@ function setup() {
         currentselected = "pesticide"
       })
 
-      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
-      growthProgress.value(0);
+      growthProgress = newProgress(200, canvas.height - 50, 200, 'growthProgress');
+      growthProgress.value(growthValue);
       // Setup both bars.
       healthText = createP('Health');
       healthText.parent('sketchHolder');
@@ -269,7 +269,7 @@ function draw() {
 
     dayCounter = Math.floor((angle - 180) / 360);
 
-    // dayCounterValueElement.html(dayCounter);
+    dayCounterValueElement.html(dayCounter);
 
     cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
@@ -282,10 +282,9 @@ function draw() {
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
     //Draw plant related stuff!
-    //treeAngle = angleSlider.value();
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
     push();
-    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 -100 + bob);
+    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 215+ bob);
     branch(growthValue);
     pop();
 
@@ -362,7 +361,7 @@ function draw() {
       }
     }
   
-    if (randNum == 6 || randNum == 8) {
+    if (randSeedNum == 6 || randSeedNum == 8) {
       seedHeightAlterer = 0.64
     } else {
       seedHeightAlterer = 0.65
@@ -391,6 +390,8 @@ function draw() {
         daySpeedPrompt();
       }
     }
+    //update growth bar
+    growthProgress.value(growthValue);
   }
 
 }
@@ -403,59 +404,6 @@ function draw() {
 //   text.id('seedDataTitle');
 // }
 
-// function seedDataBody() {
-//   let infoLabel = createP('seedDataBody');
-//   infoLabel.parent('sketchHolder');
-//   infoLabel.id('seedDataBody');
-//   let message = '';
-//   if (randNum == 1) {
-//     message = 'you have found a generic seed!';
-//   } else if (randNum == 2) {
-//     message = 'you have found a pearl seed!';
-//   } else if (randNum == 3) {
-//     message = 'you have found a pear seed!';
-
-//   } else if (randNum == 4) {
-//     message = 'you have found a ginger seed!';
-
-//   } else if (randNum == 5) {
-//     message = 'you have found a coal seed!';
-
-//   } else if (randNum == 6) {
-//     message = 'you have found a pebble seed!';
-
-//   } else if (randNum == 7) {
-//     message = 'you have found a blood seed!';
-
-//   } else if (randNum == 8) {
-//     message = 'you have found a potato seed!';
-//   }
-//   infoLabel.html(message + `
-//     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
-//   `)
-// }
-// function growPlant(){
-
-
-
-  
-// }
-// function loadSeed() {
-//   randNum = (Math.floor(Math.random() * 9)).toString();
-//   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
-
-//   return loadImage(seedImgPath);
-// }
-// function drawSeed() {
-//   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
-// }
-
-// function loadPlantMaterial() {
-//   randNum = (Math.floor(Math.random() * 9)).toString();
-//   plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randNum, '.png');
-
-//   return loadImage(plantMaterialPath);
-// }
 
 // Draw plant
 function branch(len) {
