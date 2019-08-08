@@ -104,7 +104,6 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
-
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -131,7 +130,6 @@ function setup() {
 
       clouds[cloudCount].width = cloudWidth - i * cloudSizeDifference + clouds[i].widthOffset;
       clouds[cloudCount].height = cloudHeight - i * cloudSizeDifference + clouds[i].heightOffset;
-
       cloudCount++;
     }
   }
