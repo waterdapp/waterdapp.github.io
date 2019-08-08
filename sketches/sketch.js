@@ -245,7 +245,7 @@ function draw() {
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-
+    
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
@@ -374,7 +374,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-
+    //draw a rectangle
+    strokeWeight(5);
+    stroke("black")
+    fill("gray")
+    rectMode(CENTER)
+    rect(window.innerWidth - 500, 125, 1000, 250 )
+    
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
       if (e.keyCode == 32) {
@@ -391,40 +397,50 @@ function draw() {
 
 function seedDataTitle() {
 
-  text = createP('seedData');
+  text = createP('Seed Data');
   text.parent('sketchHolder');
   text.id('seedDataTitle');
 }
 
 function seedDataBody() {
+  let message2 = '';
   let infoLabel = createP('seedDataBody');
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
   let message = '';
   if (randSeedNum == 1) {
     message = 'you have found a generic seed!';
-  } else if (randSeedNum == 2) {
+    message2 = "these are dirt cheap and [enter generic fact here]"
+  } else if (randNum == 2) {
     message = 'you have found a pearl seed!';
-  } else if (randSeedNum == 3) {
+    message2 = "The pearl seed is a famous trickster plant, <br>because despite the name, pearl seeds are worth<br> very little.Howerer, they do have a pleasant<br>aroma when crushed."
+  } else if (randNum == 3) {
     message = 'you have found a pear seed!';
-
-  } else if (randSeedNum == 4) {
+    message2 = "The pear seed is misleadingly named, as the tree <br>doesn't actually grow pears. Instead, the fruits <br>of the pear tree are actually bitter,<br> pear shaped pods which are used in many medicianal remedys."
+  } else if (randNum == 4) {
     message = 'you have found a ginger seed!';
-
-  } else if (randSeedNum == 5) {
+    message = "If you enjoy the taste of ginger, then a ginger tree<br>will be an exellent addition to your garden! The fruits<br> of the tree are the famous root (don't ask),<br> so you get a year long supply if you look after your plant!"
+  } else if (randNum == 5) {
     message = 'you have found a coal seed!';
-
-  } else if (randSeedNum == 6) {
+    message2 = "When the coal tree and it's seeds were found, it brought <br> the end of destructive coal mining, as every part of<br> the tree burns like coal, and farming the species is <br> much easier than mining."
+  } else if (randNum == 6) {
     message = 'you have found a pebble seed!';
-
-  } else if (randSeedNum == 7) {
+    message2 = "although abundant, pebble seeds can be quite hard <br>to find,as they blend into their most common habitat, <br>shingle beaches.The wood of the pebble tree becomes as<br> hard as stone when left in seawater for five days."
+  } else if (randNum == 7) {
     message = 'you have found a blood seed!';
-
-  } else if (randSeedNum == 8) {
-    message = 'you have found a potato seed!';
+    message2 = "The blood seed is widely regarded as Mother Nature's <br>most accursed creation, and folk tales tell of blood<br> trees using their branches to skewer unwary travellers."
+  } else if (randNum == 8) {
+    message = 'you have found a potato seed!'
+    message2 = "Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?"
   }
-  infoLabel.html(message + `
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
+  infoLabel.html(`
+    <p>
+    ${message}
+    </p>
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
+    <p>
+    ${message2}
+    </p>
   `)
 }
 function loadSeed() {
@@ -545,3 +561,4 @@ function keyPressed() {
     }
   }
 }
+
