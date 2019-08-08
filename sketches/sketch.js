@@ -503,6 +503,7 @@ function branch(len) {
   if (len > 10) {
     image(plantMaterial, 0, 0, plantThickness, -len);
   } else if (len <= 10) {
+    // draws the material at the end of the branch; hopefully you can replace with fruit image
     image(leafMaterial, 0, 0, plantThickness, -len);
   }
   translate(0, -len);
