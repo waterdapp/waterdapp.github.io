@@ -34,7 +34,8 @@ const cloudSizeDifference = 60;
 const cloudNumRow = 4;
 
 let startButton;
-let randNum;
+let randSeedNum;
+let randStickNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
@@ -273,7 +274,6 @@ function draw() {
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
     //Draw plant related stuff!
-    //treeAngle = angleSlider.value();
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
     push();
     translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 215+ bob);
@@ -353,7 +353,7 @@ function draw() {
       }
     }
   
-    if (randNum == 6 || randNum == 8) {
+    if (randSeedNum == 6 || randSeedNum == 8) {
       seedHeightAlterer = 0.64
     } else {
       seedHeightAlterer = 0.65
@@ -401,35 +401,35 @@ function seedDataBody() {
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
   let message = '';
-  if (randNum == 1) {
+  if (randSeedNum == 1) {
     message = 'you have found a generic seed!';
-  } else if (randNum == 2) {
+  } else if (randSeedNum == 2) {
     message = 'you have found a pearl seed!';
-  } else if (randNum == 3) {
+  } else if (randSeedNum == 3) {
     message = 'you have found a pear seed!';
 
-  } else if (randNum == 4) {
+  } else if (randSeedNum == 4) {
     message = 'you have found a ginger seed!';
 
-  } else if (randNum == 5) {
+  } else if (randSeedNum == 5) {
     message = 'you have found a coal seed!';
 
-  } else if (randNum == 6) {
+  } else if (randSeedNum == 6) {
     message = 'you have found a pebble seed!';
 
-  } else if (randNum == 7) {
+  } else if (randSeedNum == 7) {
     message = 'you have found a blood seed!';
 
-  } else if (randNum == 8) {
+  } else if (randSeedNum == 8) {
     message = 'you have found a potato seed!';
   }
   infoLabel.html(message + `
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
   `)
 }
 function loadSeed() {
-  randNum = (Math.floor(Math.random() * 8) + 1).toString();
-  seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
+  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
+  seedImgPath = '../src/assets/seeds/seed'.concat(randSeedNum, '.png');
 
   return loadImage(seedImgPath);
 }
@@ -438,8 +438,8 @@ function drawSeed() {
 }
 
 function loadPlantMaterial() {
-  randNum = ((Math.floor(Math.random() * 8) + 1)).toString();
-  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randNum, '.png');
+  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
+  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
 
   return loadImage(plantMaterialPath);
 }
