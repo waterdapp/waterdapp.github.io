@@ -414,7 +414,7 @@ function draw() {
         stroke("black")
         fill("gray")
         rectMode(CENTER)
-        rect(window.innerWidth - 500, 125, 1000, 250 )
+        rect(window.innerWidth - 400, 150, 800, 300 )
 
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
@@ -607,7 +607,7 @@ function keyPressed() {
   }
 }
 function drawGrassGif(){
-  randPos = (Math.floor(Math.random() * 8) + 1).toString(); 
+  randPos = random(  window.innerHeight / 2 - 200)
   image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
   gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
 }
