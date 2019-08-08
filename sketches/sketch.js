@@ -589,7 +589,6 @@ function daySpeedPrompt() {
 }
 
 function keyPressed() {
-  console.log(mouseX, mouseY)
   if (keyCode === 50) {
     currentselected = 'pesticide';
     if (currentselected === 'pesticide') {
