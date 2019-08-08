@@ -73,8 +73,8 @@ let gameTime = 0;
 let themeMusic;
 
 function preload() {
-  img = loadImage('../src/branding/logo.png');
-  sun = loadImage('../src/assets/sun/Sun1.png');
+  img = loadImage('../src/branding/Logo.png');
+  sun = loadImage('../src/assets/sun/sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pot = loadImage('../src/assets/pot/pot1.png')
