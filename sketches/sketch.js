@@ -452,26 +452,17 @@ function drawMoney() {
   image(coinImage)
 }
 
+let countFruits = 0
 // Draw plant
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
   if (len > 10) {
     image(plantMaterial, 0, 0, plantThickness, -len);
   } else if (len <= 10) {
-    if (random() < 0.02) {
-      // Spawn a new fruit
-      // seed.fruits.push(new Fruit(seed));
-      // seed.fruits[seed.countFruits].position = {
-      //   x: window.innerWidth/2- seedImgWidthOriginal/2 +30,
-      //   y: window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob
-      // }
-      // seed.countFruits++;
-
-      image(new Fruit(seed).image, 0, 0, 20, 20);
-
-    } else {
-      image(leafMaterial, 0, 0, plantThickness, -len);
-    }
+   
+  
+    image(leafMaterial, 0, 0, plantThickness, -len);
+    
   }
   translate(0, -len);
   if (len > 10) {
@@ -483,6 +474,10 @@ function branch(len) {
     rotate(-treeAngle+(bob/1600));
     branch(len * 0.75)
     pop();
+    if (len > 25 && growthValue > 50) {
+      image(new Fruit(seed).image, 0, 0, 20, 20);
+      countFruits++;
+    }
   }
 }
 
