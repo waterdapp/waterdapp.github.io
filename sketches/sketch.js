@@ -52,6 +52,7 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
+let bugpesticidecollision = false 
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
 daySpeeds = [0.02, 0.1, 0.18];
@@ -260,8 +261,7 @@ function draw() {
     // Increase the day counter for the text
 
     dayCounter = Math.floor((angle - 180) / 360);
-
-    // dayCounterValueElement.html(dayCounter);
+    dayCounterValueElement.html(dayCounter);
 
     cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
@@ -383,6 +383,7 @@ function draw() {
         daySpeedPrompt();
       }
     }
+    // Set the growth bar to the current growth level
     growthProgress.value(growthValue);
   }
 
