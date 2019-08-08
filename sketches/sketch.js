@@ -55,6 +55,7 @@ let bug1;
 let bug2;
 let healthText;
 let hydrationText;
+var gif_loadImgL, gif_createImgR;
 
 daySpeeds = [0.02, 0.5, 1.0]
 
@@ -80,6 +81,9 @@ function preload() {
   cloud1 = loadImage('../src/assets/clouds/cloud1.png');
   cloud2 = loadImage('../src/assets/clouds/cloud2.png');
   cloud3 = loadImage('../src/assets/clouds/cloud3.png');
+  gif_loadImgL = loadImage("../src/assets/grass/grass left.gif");
+  gif_loadImgR = loadImage("../src/assets/grass/grass right.gif");
+  
 };
 
 
@@ -97,7 +101,9 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
-
+  gif_createImgL = createImg("../src/assets/grass/grass left.gif");
+  gif_createImgR = createImg("../src/assets/grass/grass right.gif");
+  
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -206,7 +212,7 @@ function draw() {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
   }
   if (!isLogoVisible) {
-    // Every other second run this
+   //Every other second run this
     if (daySpeed === 0.1) {
       if (frameCount % 60 === 0) {
         hydrationProgress.value(hydrationProgress.value() - 1);
@@ -260,11 +266,11 @@ function draw() {
 
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
-
-    //Draw the island and pot
-    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+    
     // Draw plant related stuff!
     drawSeed();
+    //Draw the island and pot
+    image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
     if (currentselected === 'watering_can') {
@@ -438,6 +444,7 @@ function loadSeed() {
 
 function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+  drawGrassGif();
 }
 
 function windowResized() {
@@ -521,6 +528,12 @@ function keyPressed() {
       }
     }
   }
+}
+function drawGrassGif(){
+  let randPos
+  randPos = (Math.floor(Math.random() * 8) + 1).toString();
+  image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
+  gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
 }
 
      //_____________
