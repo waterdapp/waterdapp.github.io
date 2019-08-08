@@ -33,7 +33,8 @@ const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
 
-let seedsImages = []
+let seedsImages = [];
+let fruitsImages = [];
 
 let startButton;
 let randNum;
@@ -78,6 +79,7 @@ function preload() {
 
   for (let i = 0; i < 8; i++) {
     seedsImages[i] = loadImage('../src/assets/seeds/seed'+(i+1)+'.png');
+    fruitsImages[i] = loadImage('../src/assets/fruits/fruit'+(i+1)+'.png');
   }
 
   seed = new Seed(floor(random(1, 8)));
