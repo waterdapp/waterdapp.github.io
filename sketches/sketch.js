@@ -40,6 +40,7 @@ let seedsImages = [];
 let fruitsImages = [];
 
 let startButton;
+let howToGif
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
@@ -106,6 +107,7 @@ function preload() {
   cloud3 = loadImage('../src/assets/clouds/cloud3.png');
   gif_loadImgL = loadImage("../src/assets/grass/grass left.gif");
   gif_loadImgR = loadImage("../src/assets/grass/grass right.gif");
+  howToGif = loadImage("../src/assets/HowToPlay/HowToPlayButton.gif");
   
 
   //Music section
@@ -133,6 +135,7 @@ function setup() {
   pesticide2.loadPixels();
   gif_createImgL = createImg("../src/assets/grass/grass left.gif");
   gif_createImgR = createImg("../src/assets/grass/grass right.gif");
+  howTOgif = createImg("../src/assets/HowToPlay/HowToPlayButton.gif");
   
   pot.loadPixels();
   bug1.loadPixels();
@@ -243,8 +246,10 @@ function setup() {
 }
 
 function draw() {
-  if (isLogoVisible) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+  //if (isLogoVisible) {
+    //image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
+    //image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 620, 300, 300 )  // this is not
+    //howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 620, )
   }
   if (!isLogoVisible) {
    //Every other second run this
@@ -611,4 +616,3 @@ function drawGrassGif(){
   image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
   gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
 }
-
