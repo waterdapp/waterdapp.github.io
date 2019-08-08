@@ -23,7 +23,7 @@ let cloud2;
 let cloud3;
 let sun;
 let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
-let plantMaterial, plantMaterialPath;
+let plantMaterial, plantMaterialPath, leafMaterialPath, leafMaterial;
 let pot;
 let clouds = [];
 let cloudImages = [];
@@ -93,6 +93,9 @@ function preload() {
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
   
   plantMaterial = seed.loadPlantMaterial();
+
+  leafMaterial = loadLeafMaterial();
+
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
@@ -486,19 +489,22 @@ function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
 }
 
-function loadPlantMaterial() {
+function loadLeafMaterial() {
   randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
-  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
+  leafMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
 
-  return loadImage(plantMaterialPath);
+  return loadImage(leafMaterialPath);
 }
+
 
 // Draw plant
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
-  noStroke();
-  fill(60, 161, 35);
-  image(plantMaterial, 0, 0, plantThickness, -len);
+  if (len > 10) {
+    image(plantMaterial, 0, 0, plantThickness, -len);
+  } else if (len <= 10) {
+    image(leafMaterial, 0, 0, plantThickness, -len);
+  }
   translate(0, -len);
   if (len > 10) {
     push();
