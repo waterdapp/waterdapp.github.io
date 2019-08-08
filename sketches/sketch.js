@@ -164,7 +164,7 @@ function setup() {
   }
   // play theme music
   themeMusic.setVolume(0.1);
-  themeMusic.play();
+
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -173,11 +173,6 @@ function setup() {
     if (isLogoVisible) {
       // Flip the value of logo visible
       isLogoVisible = !(isLogoVisible);
-
-
-
-      
-
 
       // Add the time slider
       speedSlider = newSlider(40, canvas.height - 50);
@@ -285,12 +280,8 @@ function draw() {
         seedImgWidth -= 8;
         seedImgHeight -= 8;
       }
-    }           
 
-    // loop music
-    if (!(themeMusic.isPlaying())) {
-      themeMusic.play();
-    }
+    }           
 
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
@@ -440,10 +431,6 @@ function draw() {
     } else {
       seedHeightAlterer = 0.65
     }
-    //Draw bugs
-    
-
-
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
       hydrationText.style('color', 'red');
@@ -484,7 +471,12 @@ function draw() {
         endOfGame();
       }
     }
+    // loop music
+    if (!(themeMusic.isPlaying())) {
+      themeMusic.play();
+    }
   }
+  
 }
 
 function seedDataTitle() {
