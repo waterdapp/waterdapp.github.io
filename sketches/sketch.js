@@ -450,7 +450,7 @@ function draw() {
       seedHeightAlterer = 0.65
     }
     //Draw bugs
-    image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
+    
 
 
     // Make the text color red if hydration or health values are red
