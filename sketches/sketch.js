@@ -13,6 +13,7 @@ let bugPosition = {
   y: (window.innerHeight / 2)+ 140,
 }
 //let whichSeed;
+let randPos;
 let seedHeightAlterer
 let canvas;
 let value = 0;
@@ -58,8 +59,6 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
-let healthText;
-let hydrationText;
 var gif_loadImgL, gif_createImgR;
 let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
@@ -608,8 +607,7 @@ function keyPressed() {
   }
 }
 function drawGrassGif(){
-  let randPos
-  randPos = (Math.floor(Math.random() * 8) + 1).toString();
+  randPos = (Math.floor(Math.random() * 8) + 1).toString(); 
   image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
   gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
 }
