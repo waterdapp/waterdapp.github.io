@@ -32,6 +32,8 @@ let cloudHeight = 175;
 const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
+let endDayScore;
+var endReached = 'no';
 
 let seedsImages = [];
 let fruitsImages = [];
@@ -398,6 +400,17 @@ function draw() {
     }
     //update growth bar
     growthProgress.value(growthValue);
+
+    // End Screen
+    
+    if (healthProgress.value() === 0) {
+      if (endReached === 'no') {
+        endReached = 'yes';
+        endDayScore = dayCounter;
+        alert('Your plant has died. Thanks for playing! You kept your plant alive for ' + endDayScore + ' days.');
+        endOfGame();
+      }
+    }
   }
 
 }
