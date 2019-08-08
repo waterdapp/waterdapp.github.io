@@ -261,8 +261,7 @@ function draw() {
     // Increase the day counter for the text
 
     dayCounter = Math.floor((angle - 180) / 360);
-
-    // dayCounterValueElement.html(dayCounter);
+    dayCounterValueElement.html(dayCounter);
 
     cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
