@@ -16,6 +16,10 @@ let bugPosition = {
 let seedHeightAlterer
 let canvas;
 let value = 0;
+
+let money = 0;
+let coinImage;
+
 let img;
 let moon;
 let cloud1;
@@ -80,8 +84,9 @@ function preload() {
   img = loadImage('../src/branding/Logo.png');
   sun = loadImage('../src/assets/sun/sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
-  island = loadImage('../src/assets/floatingisland/floatingisland1.png')
-  pot = loadImage('../src/assets/pot/pot1.png')
+  island = loadImage('../src/assets/floatingisland/floatingisland1.png');
+  pot = loadImage('../src/assets/pot/pot1.png');
+  coinImage = loadImage('../src/assets/coins/coin.png');
 
   for (let i = 0; i < 3; i++) {
     cloudImages[i] = loadImage('../src/assets/clouds/cloud' + (i + 1) + '.png');
@@ -94,8 +99,11 @@ function preload() {
 
   seed = new Seed(floor(random(1, 8)));
 
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
+
   seedImg = seed.image;
+
   plantMaterial = seed.loadPlantMaterial();
 
   leafMaterial = loadLeafMaterial();
@@ -128,6 +136,7 @@ function setup() {
   img.loadPixels();
   sun.loadPixels();
   moon.loadPixels();
+  coinImage.loadPixels();
   island.loadPixels();
   watering1.loadPixels();
   watering2.loadPixels();
@@ -138,6 +147,11 @@ function setup() {
   bug2.loadPixels();
   dayCounter = 0;
   roundedDayNumber = 0;
+
+  for (let i=0; i < fruitsImages.length; i++) {
+    fruitsImages[i].loadPixels();
+    seedsImages[i].loadPixels();
+  }
 
   // Initializing all cloud entities
   let cloudCount = 0
@@ -194,6 +208,10 @@ function setup() {
       selectpesticide.mousePressed(() => {
         currentselected = "pesticide"
       })
+
+
+      coinElement = createP('<img width="100" height="100" src="../src/assets/coins/coin.png"> <span id="moneyDisplay">'+ money + '</span>');
+      coinElement.position(10, 120);
 
       growthProgress = newProgress(150, canvas.height - 50, growthMax, 'growthProgress');
       growthProgress.value(growthValue);
@@ -323,6 +341,7 @@ function draw() {
     }
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+
     //Draw plant related stuff!
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
     push();
@@ -413,6 +432,7 @@ function draw() {
           healthProgress.value(healthProgress.value() + 0.2);
         }
 
+
       } else {
         image(watering1, mouseX - 35, mouseY - 66, 200, 200)
       }
@@ -478,54 +498,6 @@ function draw() {
   
 }
 
-function seedDataTitle() {
-  text = createP('seedData');
-  text.parent('sketchHolder');
-  text.id('seedDataTitle');
-}
-
-function seedDataBody() {
-  let infoLabel = createP('seedDataBody');
-  infoLabel.parent('sketchHolder');
-  infoLabel.id('seedDataBody');
-  let message = '';
-  if (randSeedNum == 1) {
-    message = 'you have found a generic seed!';
-  } else if (randSeedNum == 2) {
-    message = 'you have found a pearl seed!';
-  } else if (randSeedNum == 3) {
-    message = 'you have found a pear seed!';
-
-  } else if (randSeedNum == 4) {
-    message = 'you have found a ginger seed!';
-
-  } else if (randSeedNum == 5) {
-    message = 'you have found a coal seed!';
-
-  } else if (randSeedNum == 6) {
-    message = 'you have found a pebble seed!';
-
-  } else if (randSeedNum == 7) {
-    message = 'you have found a blood seed!';
-
-  } else if (randSeedNum == 8) {
-    message = 'you have found a potato seed!';
-  }
-  infoLabel.html(message + `
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
-  `)
-}
-
-function loadSeed() {
-  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
-  seedImgPath = '../src/assets/seeds/seed'.concat(randSeedNum, '.png');
-
-  return loadImage(seedImgPath);
-}
-
-function drawSeed() {
-  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
-}
 
 function loadLeafMaterial() {
   randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
@@ -534,6 +506,11 @@ function loadLeafMaterial() {
   return loadImage(leafMaterialPath);
 }
 
+function drawMoney() {
+  image(coinImage)
+}
+
+let countFruits = 0
 
 // Draw plant
 function branch(len) {
@@ -541,19 +518,27 @@ function branch(len) {
   if (len > 10) {
     image(plantMaterial, 0, 0, plantThickness, -len);
   } else if (len <= 10) {
-    // draws the material at the end of the branch; hopefully you can replace with fruit image
+   
+  
     image(leafMaterial, 0, 0, plantThickness, -len);
+   
   }
   translate(0, -len);
   if (len > 10) {
     push();
-    rotate(treeAngle + (bob / 3200));
+
+    rotate(treeAngle+(bob/3200));
     branch(len * 0.75)
     pop();
     push();
-    rotate(-treeAngle + (bob / 1600));
+    rotate(-treeAngle+(bob/1600));
     branch(len * 0.75)
     pop();
+    if (len > 25 && growthValue > 50) {
+      image(new Fruit(seed).image, 0, 0, 20, 20);
+      countFruits++;
+    }
+
   }
 }
 
@@ -604,6 +589,7 @@ function daySpeedPrompt() {
 }
 
 function keyPressed() {
+  console.log(mouseX, mouseY)
   if (keyCode === 50) {
     currentselected = 'pesticide';
     if (currentselected === 'pesticide') {
