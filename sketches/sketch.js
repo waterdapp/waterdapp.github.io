@@ -56,6 +56,7 @@ let currentselected = "";
 let selectwateringcan;
 let selectpesticide;
 let pesticide2;
+let pesticide;
 let dayCounter;
 let dayCounterValueElement;
 let bug1;
@@ -122,7 +123,6 @@ function preload() {
 function setup() {
   // create a canvas
   canvas = createCanvas(window.innerWidth, window.innerHeight);
-  console.log(canvas.height)
   canvas.parent('sketchHolder')
   img.loadPixels();
   sun.loadPixels();
@@ -161,7 +161,9 @@ function setup() {
       cloudCount++;
     }
   }
-
+  // play theme music
+  themeMusic.setVolume(0.1);
+  themeMusic.play();
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -171,9 +173,9 @@ function setup() {
       // Flip the value of logo visible
       isLogoVisible = !(isLogoVisible);
 
-      // play theme music
-      themeMusic.setVolume(0.1);
-      themeMusic.play();
+
+
+      
 
 
       // Add the time slider
@@ -282,7 +284,7 @@ function draw() {
         seedImgWidth -= 8;
         seedImgHeight -= 8;
       }
-    }
+    }           
 
     // loop music
     if (!(themeMusic.isPlaying())) {
