@@ -27,7 +27,7 @@ let cloud2;
 let cloud3;
 let sun;
 let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
-let plantMaterial, plantMaterialPath;
+let plantMaterial, plantMaterialPath, leafMaterialPath, leafMaterial;
 let pot;
 let clouds = [];
 let cloudImages = [];
@@ -93,9 +93,13 @@ function preload() {
 
   seed = new Seed(floor(random(1, 8)));
 
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-  
+
   plantMaterial = seed.loadPlantMaterial();
+
+  leafMaterial = loadLeafMaterial();
+
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
@@ -267,17 +271,6 @@ function draw() {
         seedImgWidth -= 8;
         seedImgHeight -= 8;
       }
-      // start to grow fruits after a certain amount of growth
-      if (growthValue >= 80 && seed.countFruits < 5) {
-        // Calculate radius from first branch to the the leaves. Spawn fruits where leaves are.
-        seed.fruits.push(new Fruit(seed));
-        seed.firstBranchPos = {x: seed.middlePos.x, y: seed.middlePos - growthValue};
-        seed.fruits[0].position = {
-          x:seed.middlePos.x + seed.radiusCrown,
-          y:seed.middlePos.y
-        }
-        seed.countFruits++;
-      }
     }
 
     // Code for orbit and background colour calculation
@@ -400,8 +393,6 @@ function draw() {
     //Draw bugs
     image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
 
-    fill(255, 0, 0)
-    rect(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob, 100, 100)
     seed.middlePos = {
       x: window.innerWidth/2- seedImgWidthOriginal/2 +30,
       y: window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob
@@ -450,6 +441,13 @@ function draw() {
 
 }
 
+function loadLeafMaterial() {
+  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
+  leafMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
+
+  return loadImage(leafMaterialPath);
+}
+
 function drawMoney() {
   image(coinImage)
 }
@@ -457,9 +455,24 @@ function drawMoney() {
 // Draw plant
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
-  noStroke();
-  fill(60, 161, 35);
-  image(plantMaterial, 0, 0, plantThickness, -len);
+  if (len > 10) {
+    image(plantMaterial, 0, 0, plantThickness, -len);
+  } else if (len <= 10) {
+    if (random() < 0.02) {
+      // Spawn a new fruit
+      // seed.fruits.push(new Fruit(seed));
+      // seed.fruits[seed.countFruits].position = {
+      //   x: window.innerWidth/2- seedImgWidthOriginal/2 +30,
+      //   y: window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob
+      // }
+      // seed.countFruits++;
+
+      image(new Fruit(seed).image, 0, 0, 20, 20);
+
+    } else {
+      image(leafMaterial, 0, 0, plantThickness, -len);
+    }
+  }
   translate(0, -len);
   if (len > 10) {
     push();

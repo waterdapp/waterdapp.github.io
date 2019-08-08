@@ -9,8 +9,8 @@ class Fruit {
         this.src = '../src/assets/fruits/fruit'+ this.index +'.png';
 
         this.position = {
-            x: 800,
-            y: 800,
+            x: 0,
+            y: 0,
         }
     }
 
