@@ -22,7 +22,7 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
-let seedImg, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
 let plantMaterial, plantMaterialPath;
 let pot;
 let clouds = [];
@@ -32,6 +32,9 @@ let cloudHeight = 175;
 const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
+
+let seedsImages = [];
+let fruitsImages = [];
 
 let startButton;
 let randSeedNum;
@@ -76,18 +79,22 @@ function preload() {
     cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
   }
 
+  for (let i = 0; i < 8; i++) {
+    seedsImages[i] = loadImage('../src/assets/seeds/seed'+(i+1)+'.png');
+    fruitsImages[i] = loadImage('../src/assets/fruits/fruit'+(i+1)+'.png');
+  }
+
+  seed = new Seed(floor(random(1, 8)));
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-  seedImg = loadSeed();
-  plantMaterial = loadPlantMaterial();
+  
+  plantMaterial = seed.loadPlantMaterial();
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
   bug1 = loadImage('../src/assets/wateringcans/bug1.png');
   bug2 = loadImage('../src/assets/wateringcans/bug2.png');
-  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
-  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
-  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
 };
 
 
@@ -177,6 +184,7 @@ function setup() {
       speedText = createP('Speed');
       speedText.parent('sketchHolder');
       speedText.id('speedText');
+      
       seedText = createP('seedData');
       seedText.parent('sketchHolder');
       seedText.id('seedText');
@@ -200,7 +208,7 @@ function setup() {
       dayCounterValueElement.parent('sketchHolder');
       dayCounterValueElement.id('dayCounterText');
 
-      seedDataBody();
+      seed.dataBody();
     } else {
       mousedown = true;
     }
@@ -282,7 +290,7 @@ function draw() {
 
     // seed disappears when it is small enough
     if (seedImgWidth > 60) {
-      drawSeed();
+      seed.draw();
     }
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
@@ -394,71 +402,6 @@ function draw() {
 
 }
 
-
-function seedDataTitle() {
-
-  text = createP('Seed Data');
-  text.parent('sketchHolder');
-  text.id('seedDataTitle');
-}
-
-function seedDataBody() {
-  let message2 = '';
-  let infoLabel = createP('seedDataBody');
-  infoLabel.parent('sketchHolder');
-  infoLabel.id('seedDataBody');
-  let message = '';
-  if (randSeedNum == 1) {
-    message = 'you have found a generic seed!';
-    message2 = "these are dirt cheap and [enter generic fact here]"
-  } else if (randNum == 2) {
-    message = 'you have found a pearl seed!';
-    message2 = "The pearl seed is a famous trickster plant, <br>because despite the name, pearl seeds are worth<br> very little.Howerer, they do have a pleasant<br>aroma when crushed."
-  } else if (randNum == 3) {
-    message = 'you have found a pear seed!';
-    message2 = "The pear seed is misleadingly named, as the tree <br>doesn't actually grow pears. Instead, the fruits <br>of the pear tree are actually bitter,<br> pear shaped pods which are used in many medicianal remedys."
-  } else if (randNum == 4) {
-    message = 'you have found a ginger seed!';
-    message = "If you enjoy the taste of ginger, then a ginger tree<br>will be an exellent addition to your garden! The fruits<br> of the tree are the famous root (don't ask),<br> so you get a year long supply if you look after your plant!"
-  } else if (randNum == 5) {
-    message = 'you have found a coal seed!';
-    message2 = "When the coal tree and it's seeds were found, it brought <br> the end of destructive coal mining, as every part of<br> the tree burns like coal, and farming the species is <br> much easier than mining."
-  } else if (randNum == 6) {
-    message = 'you have found a pebble seed!';
-    message2 = "although abundant, pebble seeds can be quite hard <br>to find,as they blend into their most common habitat, <br>shingle beaches.The wood of the pebble tree becomes as<br> hard as stone when left in seawater for five days."
-  } else if (randNum == 7) {
-    message = 'you have found a blood seed!';
-    message2 = "The blood seed is widely regarded as Mother Nature's <br>most accursed creation, and folk tales tell of blood<br> trees using their branches to skewer unwary travellers."
-  } else if (randNum == 8) {
-    message = 'you have found a potato seed!'
-    message2 = "Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?"
-  }
-  infoLabel.html(`
-    <p>
-    ${message}
-    </p>
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
-    <p>
-    ${message2}
-    </p>
-  `)
-}
-function loadSeed() {
-  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
-  seedImgPath = '../src/assets/seeds/seed'.concat(randSeedNum, '.png');
-
-  return loadImage(seedImgPath);
-}
-function drawSeed() {
-  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
-}
-
-function loadPlantMaterial() {
-  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
-  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
-
-  return loadImage(plantMaterialPath);
-}
 
 // Draw plant
 function branch(len) {
