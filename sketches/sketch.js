@@ -384,12 +384,6 @@ function draw() {
         daySpeedPrompt();
       }
     }
-    pesticide2(mouseX - 100, mouseY - 60, 200, 200);
-    bug2(bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200);
-   
-   
-   hit = collideRectRect(200,200,100,150,mouseXmoiuseY,50,75);
-    
   }
 
 }
