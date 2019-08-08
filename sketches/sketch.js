@@ -166,8 +166,8 @@ function setup() {
         currentselected = "pesticide"
       })
 
-      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
-      growthProgress.value(0);
+      growthProgress = newProgress(200, canvas.height - 50, 200, 'growthProgress');
+      growthProgress.value(growthValue);
       // Setup both bars.
       healthText = createP('Health');
       healthText.parent('sketchHolder');
@@ -383,9 +383,7 @@ function draw() {
         daySpeedPrompt();
       }
     }
-
     // Set the growth bar to the current growth level
-
     growthProgress.value(growthValue);
   }
 
