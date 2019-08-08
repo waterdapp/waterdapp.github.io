@@ -420,7 +420,7 @@ function draw() {
     }
     // seed disappears when it is small enough
     if (seedImgWidth > 60) {
-      drawSeed();
+      seed.draw();
     }
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
