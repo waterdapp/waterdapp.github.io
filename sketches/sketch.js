@@ -52,7 +52,7 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
-let bugpesticidecollision = false 
+let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
 daySpeeds = [0.02, 0.1, 0.18];
@@ -259,6 +259,7 @@ function draw() {
     // Increase the day counter for the text
 
     dayCounter = Math.floor((angle - 180) / 360);
+
     dayCounterValueElement.html(dayCounter);
 
     cloudBob = -sin(angle-180) * 5;
@@ -275,7 +276,7 @@ function draw() {
     //treeAngle = angleSlider.value();
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
     push();
-    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 -100 + bob);
+    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 215+ bob);
     branch(growthValue);
     pop();
 
@@ -381,7 +382,7 @@ function draw() {
         daySpeedPrompt();
       }
     }
-    // Set the growth bar to the current growth level
+    //update growth bar
     growthProgress.value(growthValue);
   }
 
@@ -426,14 +427,8 @@ function seedDataBody() {
     <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
   `)
 }
-function growPlant(){
-
-
-
-  
-}
 function loadSeed() {
-  randNum = (Math.floor(Math.random() * 9)).toString();
+  randNum = (Math.floor(Math.random() * 8) + 1).toString();
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
@@ -443,7 +438,7 @@ function drawSeed() {
 }
 
 function loadPlantMaterial() {
-  randNum = (Math.floor(Math.random() * 9)).toString();
+  randNum = ((Math.floor(Math.random() * 8) + 1)).toString();
   plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randNum, '.png');
 
   return loadImage(plantMaterialPath);
