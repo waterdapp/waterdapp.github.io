@@ -253,7 +253,7 @@ function draw() {
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-
+    
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
@@ -382,7 +382,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-
+    //draw a rectangle
+    strokeWeight(5);
+    stroke("black")
+    fill("gray")
+    rectMode(CENTER)
+    rect(window.innerWidth - 500, 125, 1000, 250 )
+    
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
       if (e.keyCode == 32) {
@@ -395,14 +401,6 @@ function draw() {
   }
 
 }
-
-
-// function seedDataTitle() {
-
-//   text = createP('seedData');
-//   text.parent('sketchHolder');
-//   text.id('seedDataTitle');
-// }
 
 
 // Draw plant
@@ -506,3 +504,4 @@ function keyPressed() {
     }
   }
 }
+
