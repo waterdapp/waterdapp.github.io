@@ -155,9 +155,7 @@ function setup() {
       cloudCount++;
     }
   }
-  // play theme music
-  themeMusic.setVolume(0.1);
-  themeMusic.play();
+
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -167,8 +165,10 @@ function setup() {
       // Flip the value of logo visible
       isLogoVisible = !(isLogoVisible);
 
-      //stop playing theme
-      //themeMusic.stop();
+      // play theme music
+      themeMusic.setVolume(0.1);
+      themeMusic.play();
+
 
       // Add the time slider
       speedSlider = newSlider(40, canvas.height - 50);
@@ -267,6 +267,11 @@ function draw() {
         seedImgWidth -= 8;
         seedImgHeight -= 8;
       }
+    }
+
+    // loop music
+    if (!(themeMusic.isPlaying())) {
+      themeMusic.play();
     }
 
     // Code for orbit and background colour calculation
@@ -496,15 +501,15 @@ function branch(len) {
   image(plantMaterial, 0, 0, plantThickness, -len);
   translate(0, -len);
   if (len > 10) {
-  push();
-  rotate(treeAngle+(bob/3200));
-  branch(len * 0.75)
-  pop();
-  push();
-  rotate(-treeAngle+(bob/1600));
-  branch(len * 0.75)
-  pop();
-  }
+    push();
+    rotate(treeAngle+(bob/3200));
+    branch(len * 0.75)
+    pop();
+    push();
+    rotate(-treeAngle+(bob/1600));
+    branch(len * 0.75)
+    pop();
+  } 
 }
 
 function windowResized() {
