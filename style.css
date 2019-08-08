@@ -109,7 +109,7 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    top: 50px;
+    top: 40px;
     font-size: 15px;
     right: 75px;
 }
@@ -117,7 +117,7 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    top: 70px;
+    top: 50px;
     font-size: 15px;
     right: 75px;
 
@@ -126,9 +126,9 @@ progress {
     font-family: 'Press Start 2P', cursive;
     position: absolute;
     color: white;
-    top: 90px;
+    top: 70px;
     font-size: 15px;
-    right: 75px;
+    right: 78px;
 
 }
 

@@ -202,13 +202,10 @@ function setup() {
 }
 
 function draw() {
-  //draw a rectangle
   if (isLogoVisible) {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
   }
   if (!isLogoVisible) {
-    rectMode(CENTER)
-    rect(window.innerWidth - 200, window.innerHeight - window.innerHeight - 100, 400, 200 )
     // Every other second run this
     if (daySpeed === 0.1) {
       if (frameCount % 60 === 0) {
@@ -230,7 +227,7 @@ function draw() {
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-
+    
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
@@ -358,7 +355,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-
+    //draw a rectangle
+    strokeWeight(5);
+    stroke("black")
+    fill("gray")
+    rectMode(CENTER)
+    rect(window.innerWidth - 500, 125, 1000, 250 )
+    
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
       if (e.keyCode == 32) {
@@ -373,7 +376,7 @@ function draw() {
 
 function seedDataTitle() {
 
-  text = createP('seedData');
+  text = createP('Seed Data');
   text.parent('sketchHolder');
   text.id('seedDataTitle');
 }
@@ -386,7 +389,7 @@ function seedDataBody() {
   let message = '';
   if (randNum == 1) {
     message = 'you have found a generic seed!';
-    message = ""
+    message2 = "these are dirt cheap and [enter generic fact here]"
   } else if (randNum == 2) {
     message = 'you have found a pearl seed!';
     message2 = "The pearl seed is a famous trickster plant, <br>because despite the name, pearl seeds are worth<br> very little.Howerer, they do have a pleasant<br>aroma when crushed."
@@ -426,8 +429,8 @@ function growPlant(){
   
 }
 function loadSeed() {
-  //randNum = (Math.floor(Math.random() * 8) + 1).toString();
-  randNum = 3
+  randNum = (Math.floor(Math.random() * 8) + 1).toString();
+  //randNum = 4
   seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
 
   return loadImage(seedImgPath);
