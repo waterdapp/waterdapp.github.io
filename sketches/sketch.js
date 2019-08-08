@@ -269,6 +269,7 @@ function draw() {
       }
     }
 
+    // loop music
     if (!(themeMusic.isPlaying())) {
       themeMusic.play();
     }
@@ -500,15 +501,15 @@ function branch(len) {
   image(plantMaterial, 0, 0, plantThickness, -len);
   translate(0, -len);
   if (len > 10) {
-  push();
-  rotate(treeAngle+(bob/3200));
-  branch(len * 0.75)
-  pop();
-  push();
-  rotate(-treeAngle+(bob/1600));
-  branch(len * 0.75)
-  pop();
-  }
+    push();
+    rotate(treeAngle+(bob/3200));
+    branch(len * 0.75)
+    pop();
+    push();
+    rotate(-treeAngle+(bob/1600));
+    branch(len * 0.75)
+    pop();
+  } 
 }
 
 function windowResized() {
