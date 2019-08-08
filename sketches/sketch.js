@@ -9,8 +9,8 @@ let moonPosition = {
   y: window.innerHeight,
 }
 let bugPosition = {
-  x: +500,
-  y: +750,
+  x: (window.innerWidth / 2)- 150,
+  y: (window.innerHeight / 2)+ 140,
 }
 //let whichSeed;
 let seedHeightAlterer
@@ -22,11 +22,9 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
+let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let plantMaterial, plantMaterialPath;
 let pot;
-let seedImg, seedImgWidth = 100,
-  seedImgHeight = 100,
-  seedImgPath;
-
 let clouds = [];
 let cloudImages = [];
 let cloudWidth = 300;
@@ -34,12 +32,19 @@ let cloudHeight = 175;
 const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
+let endDayScore;
+var endReached = 'no';
+
+let seedsImages = [];
+let fruitsImages = [];
 
 let startButton;
 let randSeedNum;
+let randStickNum;
 let isLogoVisible = true;
 let hydrationProgress, healthProgress, growthProgress;
 let speedSlider;
+let sliderText;
 let bob = 0
 let watering1;
 let watering2;
@@ -56,12 +61,23 @@ let bug2;
 let healthText;
 let hydrationText;
 var gif_loadImgL, gif_createImgR;
+let bugpesticidecollision = false;
+let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
-daySpeeds = [0.02, 0.5, 1.0]
+daySpeeds = [0.02, 0.1, 0.18];
+growthSpeeds = [0.5, 1, 2];
+
+let angleSlider, treeAngle; 
+let growthValue = 0, growthSpeed = 0;
+let plantThickness = 8;
+
+let gameTime = 0;
+
+let themeMusic;
 
 function preload() {
-  img = loadImage('../src/branding/logo.png');
-  sun = loadImage('../src/assets/sun/Sun1.png');
+  img = loadImage('../src/branding/Logo.png');
+  sun = loadImage('../src/assets/sun/sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
   island = loadImage('../src/assets/floatingisland/floatingisland1.png')
   pot = loadImage('../src/assets/pot/pot1.png')
@@ -70,8 +86,16 @@ function preload() {
     cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
   }
 
+  for (let i = 0; i < 8; i++) {
+    seedsImages[i] = loadImage('../src/assets/seeds/seed'+(i+1)+'.png');
+    fruitsImages[i] = loadImage('../src/assets/fruits/fruit'+(i+1)+'.png');
+  }
+
+  seed = new Seed(floor(random(1, 8)));
+
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-  seedImg = loadSeed();
+  
+  plantMaterial = seed.loadPlantMaterial();
   watering1 = loadImage('../src/assets/wateringcans/wateringcan1.png');
   watering2 = loadImage('../src/assets/wateringcans/wateringcan3.png');
   pesticide = loadImage('../src/assets/wateringcans/pesticide.png');
@@ -84,6 +108,13 @@ function preload() {
   gif_loadImgL = loadImage("../src/assets/grass/grass left.gif");
   gif_loadImgR = loadImage("../src/assets/grass/grass right.gif");
   
+
+  //Music section
+  //set global sound formats
+  soundFormats('mp3', 'ogg');
+
+  //load theme as .ogg or .mp3 depending on browser
+  themeMusic = loadSound('../src/music/theme.mp3');
 };
 
 
@@ -130,11 +161,12 @@ function setup() {
 
       clouds[cloudCount].width = cloudWidth - i * cloudSizeDifference + clouds[i].widthOffset;
       clouds[cloudCount].height = cloudHeight - i * cloudSizeDifference + clouds[i].heightOffset;
-
       cloudCount++;
     }
   }
-
+  // play theme music
+  themeMusic.setVolume(0.1);
+  themeMusic.play();
   noSmooth();
   canvas.mouseReleased(() => {
     mousedown = false
@@ -143,6 +175,9 @@ function setup() {
     if (isLogoVisible) {
       // Flip the value of logo visible
       isLogoVisible = !(isLogoVisible);
+
+      //stop playing theme
+      //themeMusic.stop();
 
       // Add the time slider
       speedSlider = newSlider(40, canvas.height - 50);
@@ -165,8 +200,8 @@ function setup() {
         currentselected = "pesticide"
       })
 
-      growthProgress = newProgress(200, canvas.height - 50, '100', 'growthProgress');
-      growthProgress.value(0);
+      growthProgress = newProgress(200, canvas.height - 50, 200, 'growthProgress');
+      growthProgress.value(growthValue);
       // Setup both bars.
       healthText = createP('Health');
       healthText.parent('sketchHolder');
@@ -174,16 +209,17 @@ function setup() {
       hydrationText = createP('Hydration');
       hydrationText.parent('sketchHolder');
       hydrationText.id('hydrationText');
-      text = createP('Speed');
-      text.parent('sketchHolder');
-      text.id('speedText');
-      text = createP('seedData');
-      text.parent('sketchHolder');
-      text.id('seedText');
+      speedText = createP('Speed');
+      speedText.parent('sketchHolder');
+      speedText.id('speedText');
 
-      text = createP('Growth');
-      text.parent('sketchHolder');
-      text.id('growthText');
+      seedText = createP('seedData');
+      seedText.parent('sketchHolder');
+      seedText.id('seedText');
+
+      growthText = createP('Growth');
+      growthText.parent('sketchHolder');
+      growthText.id('growthText');
       var snailEmoji = createP('🐌');
       snailEmoji.parent('sketchHolder');
       snailEmoji.id('snailEmoji');
@@ -193,14 +229,14 @@ function setup() {
       var hareEmoji = createP('🐇');
       hareEmoji.parent('sketchHolder');
       hareEmoji.id('hareEmoji');
-      text = createP('Days');
-      text.parent('sketchHolder');
-      text.id('daysText');
+      daysText = createP('Days');
+      daysText.parent('sketchHolder');
+      daysText.id('daysText');
       dayCounterValueElement = createP(roundedDayNumber / 1000);
       dayCounterValueElement.parent('sketchHolder');
       dayCounterValueElement.id('dayCounterText');
 
-      seedDataBody();
+      seed.dataBody();
     } else {
       mousedown = true;
     }
@@ -229,25 +265,29 @@ function draw() {
     if (hydrationProgress.value() < 20) {
       healthProgress.value(healthProgress.value() - 0.02);
     }
+    //increment plant growth state according to speed setting
+    if (frameCount % (60 * (2.5 - growthSpeed)) === 0) {
+      if (growthValue <= 200) {
+        growthValue += 2;
+        plantThickness += 1/25;
+      }
+      // start shrinking seed after certain amount of growth
+      if ((growthValue >= 20) && (growthValue <= 80)) {
+        seedImgWidth -= 8;
+        seedImgHeight -= 8;
+      }
+    }
 
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-    
+
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
     // Get value of slider to determine daySpeed
-
-    if (speedSlider.value() === 0) {
-      daySpeed = daySpeeds[0]
-    } else if (speedSlider.value() === 1) {
-      daySpeed = 0.1;
-
-    } else if (speedSlider.value() === 2) {
-      daySpeed = 0.18;
-    }
-
+    daySpeed = daySpeeds[speedSlider.value()]
+    growthSpeed = growthSpeeds[speedSlider.value()]
     // Increase the orbit cycle by the time speed.
     angle += daySpeed;
     bob = sin(angle) * 50
@@ -257,7 +297,7 @@ function draw() {
 
     dayCounter = Math.floor((angle - 180) / 360);
 
-    // dayCounterValueElement.html(dayCounter);
+    dayCounterValueElement.html(dayCounter);
 
     cloudBob = -sin(angle-180) * 5;
     //maths for daylight cycle
@@ -266,11 +306,20 @@ function draw() {
 
     moonPosition.x = cos(radians(angle - 180)) * window.innerWidth / 2 + window.innerWidth / 2
     moonPosition.y = sin(radians(angle - 180)) * window.innerHeight + window.innerHeight
-    
-    // Draw plant related stuff!
-    drawSeed();
+
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+    //Draw plant related stuff!
+    treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
+    push();
+    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob);
+    branch(growthValue);
+    pop();
+
+    // seed disappears when it is small enough
+    if (seedImgWidth > 60) {
+      seed.draw();
+    }
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
     if (currentselected === 'watering_can') {
@@ -340,13 +389,13 @@ function draw() {
       }
     }
   
-    if (randNum == 6 || randNum == 8) {
+    if (randSeedNum == 6 || randSeedNum == 8) {
       seedHeightAlterer = 0.64
     } else {
       seedHeightAlterer = 0.65
     }
     //Draw bugs
-    image(bug2, bugPosition.x + cos(angle * 0.25) * 300, bugPosition.y + bob, 200, 200)
+    image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
 
 
     // Make the text color red if hydration or health values are red
@@ -361,18 +410,31 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-    //draw a rectangle
-    strokeWeight(5);
-    stroke("black")
-    fill("gray")
-    rectMode(CENTER)
-    rect(window.innerWidth - 500, 125, 1000, 250 )
-    
+        //draw a rectangle
+        strokeWeight(5);
+        stroke("black")
+        fill("gray")
+        rectMode(CENTER)
+        rect(window.innerWidth - 500, 125, 1000, 250 )
+
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
       if (e.keyCode == 32) {
         console.log("Space Bar Pressed");
         daySpeedPrompt();
+      }
+    }
+    //update growth bar
+    growthProgress.value(growthValue);
+
+    // End Screen
+    
+    if (healthProgress.value() === 0) {
+      if (endReached === 'no') {
+        endReached = 'yes';
+        endDayScore = dayCounter;
+        alert('Your plant has died. Thanks for playing! You kept your plant alive for ' + endDayScore + ' days.');
+        endOfGame();
       }
     }
   }
@@ -382,13 +444,12 @@ function draw() {
 
 function seedDataTitle() {
 
-  text = createP('Seed Data');
+  text = createP('seedData');
   text.parent('sketchHolder');
   text.id('seedDataTitle');
 }
 
 function seedDataBody() {
-  let message2 = '';
   let infoLabel = createP('seedDataBody');
   infoLabel.parent('sketchHolder');
   infoLabel.id('seedDataBody');
@@ -418,21 +479,9 @@ function seedDataBody() {
     message = 'you have found a potato seed!'
     message2 = "Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?"
   }
-  infoLabel.html(`
-    <p>
-    ${message}
-    </p>
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randNum, '.png')}></img>
-    <p>
-    ${message2}
-    </p>
+  infoLabel.html(message + `
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
   `)
-}
-function growPlant(){
-
-
-
-  
 }
 function loadSeed() {
   randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
@@ -441,14 +490,43 @@ function loadSeed() {
 
   return loadImage(seedImgPath);
 }
-
 function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
   drawGrassGif();
 }
 
+function loadPlantMaterial() {
+  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
+  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
+
+  return loadImage(plantMaterialPath);
+}
+
+// Draw plant
+function branch(len) {
+  let bob = sin(angle * 0.3) * 50;
+  noStroke();
+  fill(60, 161, 35);
+  image(plantMaterial, 0, 0, plantThickness, -len);
+  translate(0, -len);
+  if (len > 10) {
+  push();
+  rotate(treeAngle+(bob/3200));
+  branch(len * 0.75)
+  pop();
+  push();
+  rotate(-treeAngle+(bob/1600));
+  branch(len * 0.75)
+  pop();
+  }
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  // fix positioning error when window resized
+  hydrationProgress.position(canvas.width - 150, canvas.height / 2);
+  speedSlider.position(40, canvas.height - 50);
+  growthProgress.position(200, canvas.height - 50);
 }
 
 function clearCanvas() {
@@ -536,44 +614,3 @@ function drawGrassGif(){
   gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
 }
 
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|
-   
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|
-   
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|
-   
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|
-   
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|
-   
-     //_____________
-   // |            |
-   // |    @    @  |
-   // |    _____   | Meh
-    //|            |
-   // |____________|

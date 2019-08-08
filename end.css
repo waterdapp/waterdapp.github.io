@@ -1,0 +1,13 @@
+* {
+    text-align: center;
+    font-family: 'Overpass', sans-serif;
+    text-decoration: none;
+}
+
+.endImg {
+    width: 15%;
+}
+
+.scoreText {
+    font-weight: bold;
+}
