@@ -46,7 +46,7 @@ class Seed {
         let message = 'you have found a ' + this.seed.name + ' seed!';
         infoLabel.html(message + `
             <img width="50px" src=${this.src}></img> <br/>
-        <p style="padding-top:25px">` + this.description) + "</p>";
+        <p id="seedDataFunFact">` + this.description + "</p>");
     }
     
     draw() {
