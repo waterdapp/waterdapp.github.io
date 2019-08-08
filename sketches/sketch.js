@@ -33,6 +33,8 @@ const cloudOffset = 60;
 const cloudSizeDifference = 60;
 const cloudNumRow = 4;
 
+let seedsImages = []
+
 let startButton;
 let randNum;
 let isLogoVisible = true;
@@ -72,6 +74,10 @@ function preload() {
 
   for (let i = 0; i < 3; i++) {
     cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
+  }
+
+  for (let i = 0; i < 8; i++) {
+    seedsImages[i] = loadImage('../src/assets/seeds/seed'+(i+1)+'.png');
   }
 
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
