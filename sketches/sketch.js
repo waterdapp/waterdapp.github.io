@@ -424,7 +424,6 @@ function draw() {
       if (endReached === 'no') {
         endReached = 'yes';
         endDayScore = dayCounter;
-        alert('Your plant has died. Thanks for playing! You kept your plant alive for ' + endDayScore + ' days.');
         endOfGame();
       }
     }

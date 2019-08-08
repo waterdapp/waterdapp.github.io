@@ -3,7 +3,7 @@ function getURLParameter(name) {
 }
 
 function endOfGame() {
-    window.open("end.html?score=" + encodeURIComponent(endDayScore));
+    window.location = "end.html?score=" + encodeURIComponent(endDayScore);
 }
 
 function loadScore() {
