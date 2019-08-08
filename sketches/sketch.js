@@ -16,6 +16,10 @@ let bugPosition = {
 let seedHeightAlterer
 let canvas;
 let value = 0;
+
+let money = 0;
+let coinImage;
+
 let img;
 let moon;
 let cloud1;
@@ -72,8 +76,9 @@ function preload() {
   img = loadImage('../src/branding/logo.png');
   sun = loadImage('../src/assets/sun/Sun1.png');
   moon = loadImage('../src/assets/moon/moon1.png')
-  island = loadImage('../src/assets/floatingisland/floatingisland1.png')
-  pot = loadImage('../src/assets/pot/pot1.png')
+  island = loadImage('../src/assets/floatingisland/floatingisland1.png');
+  pot = loadImage('../src/assets/pot/pot1.png');
+  coinImage = loadImage('../src/assets/coins/coin.png');
 
   for (let i = 0; i < 3; i++) {
     cloudImages[i] = loadImage('../src/assets/clouds/cloud'+(i+1)+'.png');
@@ -107,6 +112,7 @@ function setup() {
   img.loadPixels();
   sun.loadPixels();
   moon.loadPixels();
+  coinImage.loadPixels();
   island.loadPixels();
   watering1.loadPixels();
   watering2.loadPixels();
@@ -171,6 +177,9 @@ function setup() {
       selectpesticide.mousePressed(() => {
         currentselected = "pesticide"
       })
+
+      coinElement = createP('<img width="100" height="100" src="../src/assets/coins/coin.png"> <span id="moneyDisplay">'+ money + '</span>');
+      coinElement.position(10, 120);
 
       growthProgress = newProgress(200, canvas.height - 50, 200, 'growthProgress');
       growthProgress.value(growthValue);
@@ -402,6 +411,9 @@ function draw() {
 
 }
 
+function drawMoney() {
+  image(coinImage)
+}
 
 // Draw plant
 function branch(len) {
