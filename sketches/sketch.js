@@ -129,6 +129,11 @@ function setup() {
   dayCounter = 0;
   roundedDayNumber = 0;
 
+  for (let i=0; i < fruitsImages.length; i++) {
+    fruitsImages[i].loadPixels();
+    seedsImages[i].loadPixels();
+  }
+
   // Initializing all cloud entities
   let cloudCount = 0
   for (let i = 0; i < cloudImages.length; i++) {
@@ -253,7 +258,7 @@ function draw() {
     }
     //increment plant growth state according to speed setting
     if (frameCount % (60 * (2.5 - growthSpeed)) === 0) {
-      if (growthValue <= 200) {
+      if (growthValue <= 80) {
         growthValue += 2;
         plantThickness += 1/25;
       }
@@ -261,6 +266,17 @@ function draw() {
       if ((growthValue >= 20) && (growthValue <= 80)) {
         seedImgWidth -= 8;
         seedImgHeight -= 8;
+      }
+      // start to grow fruits after a certain amount of growth
+      if (growthValue >= 80 && seed.countFruits < 5) {
+        // Calculate radius from first branch to the the leaves. Spawn fruits where leaves are.
+        seed.fruits.push(new Fruit(seed));
+        seed.firstBranchPos = {x: seed.middlePos.x, y: seed.middlePos - growthValue};
+        seed.fruits[0].position = {
+          x:seed.middlePos.x + seed.radiusCrown,
+          y:seed.middlePos.y
+        }
+        seed.countFruits++;
       }
     }
 
@@ -295,6 +311,7 @@ function draw() {
 
     //Draw the island and pot
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
+
     //Draw plant related stuff!
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
     push();
@@ -383,6 +400,12 @@ function draw() {
     //Draw bugs
     image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
 
+    fill(255, 0, 0)
+    rect(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob, 100, 100)
+    seed.middlePos = {
+      x: window.innerWidth/2- seedImgWidthOriginal/2 +30,
+      y: window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob
+    }
 
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
@@ -431,61 +454,6 @@ function drawMoney() {
   image(coinImage)
 }
 
-function seedDataTitle() {
-
-  text = createP('seedData');
-  text.parent('sketchHolder');
-  text.id('seedDataTitle');
-}
-
-function seedDataBody() {
-  let infoLabel = createP('seedDataBody');
-  infoLabel.parent('sketchHolder');
-  infoLabel.id('seedDataBody');
-  let message = '';
-  if (randSeedNum == 1) {
-    message = 'you have found a generic seed!';
-  } else if (randSeedNum == 2) {
-    message = 'you have found a pearl seed!';
-  } else if (randSeedNum == 3) {
-    message = 'you have found a pear seed!';
-
-  } else if (randSeedNum == 4) {
-    message = 'you have found a ginger seed!';
-
-  } else if (randSeedNum == 5) {
-    message = 'you have found a coal seed!';
-
-  } else if (randSeedNum == 6) {
-    message = 'you have found a pebble seed!';
-
-  } else if (randSeedNum == 7) {
-    message = 'you have found a blood seed!';
-
-  } else if (randSeedNum == 8) {
-    message = 'you have found a potato seed!';
-  }
-  infoLabel.html(message + `
-    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
-  `)
-}
-function loadSeed() {
-  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
-  seedImgPath = '../src/assets/seeds/seed'.concat(randSeedNum, '.png');
-
-  return loadImage(seedImgPath);
-}
-function drawSeed() {
-  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
-}
-
-function loadPlantMaterial() {
-  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
-  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
-
-  return loadImage(plantMaterialPath);
-}
-
 // Draw plant
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
@@ -494,14 +462,14 @@ function branch(len) {
   image(plantMaterial, 0, 0, plantThickness, -len);
   translate(0, -len);
   if (len > 10) {
-  push();
-  rotate(treeAngle+(bob/3200));
-  branch(len * 0.75)
-  pop();
-  push();
-  rotate(-treeAngle+(bob/1600));
-  branch(len * 0.75)
-  pop();
+    push();
+    rotate(treeAngle+(bob/3200));
+    branch(len * 0.75)
+    pop();
+    push();
+    rotate(-treeAngle+(bob/1600));
+    branch(len * 0.75)
+    pop();
   }
 }
 
@@ -548,6 +516,7 @@ function daySpeedPrompt() {
 }
 
 function keyPressed() {
+  console.log(mouseX, mouseY)
   if (keyCode === 50) {
     currentselected = 'pesticide';
     if(currentselected === 'pesticide'){
