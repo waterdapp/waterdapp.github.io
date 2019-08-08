@@ -57,7 +57,8 @@ let healthText;
 let hydrationText;
 let bugpesticidecollision = false 
 daySpeeds = [0.02, 0.5, 1.0]
-
+let hit = false;
+let showbug = true
 function preload() {
   img = loadImage('../src/branding/logo.png');
   sun = loadImage('../src/assets/sun/Sun1.png');
@@ -206,6 +207,12 @@ function draw() {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
   }
   if (!isLogoVisible) {
+    if (!showbug){
+            var randomnumber = Math.floor(random(0,1000))
+      if (randomnumber === 1){
+            showbug = true
+      }
+    }
     // Every other second run this
     if (daySpeed === 0.1) {
       if (frameCount % 60 === 0) {
@@ -221,6 +228,9 @@ function draw() {
       }
     }
     if (hydrationProgress.value() < 20) {
+      healthProgress.value(healthProgress.value() - 0.02);
+    }
+    if (showbug){
       healthProgress.value(healthProgress.value() - 0.02);
     }
 
@@ -340,9 +350,20 @@ function draw() {
       seedHeightAlterer = 0.65
     }
     //Draw bugs
-    image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
+    if (showbug){
+      image(bug2, bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200)
+    }
+    if (currentselected === 'pesticide') {
+      if (mousedown) {
+        hit = collideRectRect(bugPosition.x + cos(angle * 0.25) * 200,bugPosition.y + bob,100,150,mouseX,mouseY,50,75);
+    console.log(hit)
+    if (hit && showbug){
 
-
+      showbug = false
+        }
+      } 
+    }  
+    
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
       hydrationText.style('color', 'red');
@@ -363,11 +384,7 @@ function draw() {
         daySpeedPrompt();
       }
     }
-    pesticide2(mouseX - 100, mouseY - 60, 200, 200);
-    bug2(bugPosition.x + cos(angle * 0.25) * 200, bugPosition.y + bob, 200, 200);
-   
-   
-   hit = collideRectRect(200,200,100,150,mouseXmoiuseY,50,75);
+  
     
   }
 
