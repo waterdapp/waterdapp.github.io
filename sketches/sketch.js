@@ -95,6 +95,9 @@ function preload() {
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
   bug1 = loadImage('../src/assets/wateringcans/bug1.png');
   bug2 = loadImage('../src/assets/wateringcans/bug2.png');
+  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
+  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
+  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
 };
 
 
@@ -184,7 +187,7 @@ function setup() {
       speedText = createP('Speed');
       speedText.parent('sketchHolder');
       speedText.id('speedText');
-      
+
       seedText = createP('seedData');
       seedText.parent('sketchHolder');
       seedText.id('seedText');
@@ -253,7 +256,7 @@ function draw() {
     // Code for orbit and background colour calculation
     var colour = [0, 160 - sunPosition.y / 5, 250 - sunPosition.y / 5]
     background(colour[0], colour[1], colour[2]);
-    
+
     image(sun, sunPosition.x - 250, sunPosition.y - 250, 500, 500)
     image(moon, moonPosition.x - 250, moonPosition.y - 250, 500, 500)
 
@@ -284,7 +287,7 @@ function draw() {
     //Draw plant related stuff!
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth))/8
     push();
-    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 215+ bob);
+    translate(window.innerWidth/2- seedImgWidthOriginal/2 +30, window.innerHeight*0.75 - seedImgHeightOriginal/2 - 205+ bob);
     branch(growthValue);
     pop();
 
@@ -382,13 +385,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-    //draw a rectangle
-    strokeWeight(5);
-    stroke("black")
-    fill("gray")
-    rectMode(CENTER)
-    rect(window.innerWidth - 500, 125, 1000, 250 )
-    
+        //draw a rectangle
+        strokeWeight(5);
+        stroke("black")
+        fill("gray")
+        rectMode(CENTER)
+        rect(window.innerWidth - 500, 125, 1000, 250 )
+
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
       if (e.keyCode == 32) {
@@ -402,6 +405,61 @@ function draw() {
 
 }
 
+
+function seedDataTitle() {
+
+  text = createP('seedData');
+  text.parent('sketchHolder');
+  text.id('seedDataTitle');
+}
+
+function seedDataBody() {
+  let infoLabel = createP('seedDataBody');
+  infoLabel.parent('sketchHolder');
+  infoLabel.id('seedDataBody');
+  let message = '';
+  if (randSeedNum == 1) {
+    message = 'you have found a generic seed!';
+  } else if (randSeedNum == 2) {
+    message = 'you have found a pearl seed!';
+  } else if (randSeedNum == 3) {
+    message = 'you have found a pear seed!';
+
+  } else if (randSeedNum == 4) {
+    message = 'you have found a ginger seed!';
+
+  } else if (randSeedNum == 5) {
+    message = 'you have found a coal seed!';
+
+  } else if (randSeedNum == 6) {
+    message = 'you have found a pebble seed!';
+
+  } else if (randSeedNum == 7) {
+    message = 'you have found a blood seed!';
+
+  } else if (randSeedNum == 8) {
+    message = 'you have found a potato seed!';
+  }
+  infoLabel.html(message + `
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
+  `)
+}
+function loadSeed() {
+  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
+  seedImgPath = '../src/assets/seeds/seed'.concat(randSeedNum, '.png');
+
+  return loadImage(seedImgPath);
+}
+function drawSeed() {
+  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+}
+
+function loadPlantMaterial() {
+  randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
+  plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
+
+  return loadImage(plantMaterialPath);
+}
 
 // Draw plant
 function branch(len) {
