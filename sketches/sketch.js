@@ -383,6 +383,10 @@ function draw() {
         daySpeedPrompt();
       }
     }
+
+    // Set the growth bar to the current growth level
+
+    growthProgress.value(growthValue);
   }
 
 }
