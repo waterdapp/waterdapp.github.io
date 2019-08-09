@@ -561,6 +561,7 @@ function loadSeed() {
 function drawSeed() {
   image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
   drawGrassGif();
+}
 
 
 function loadLeafMaterial() {
@@ -702,5 +703,4 @@ function drawGrassGif(){
 
 function aboutRedirect() {
   window.location = "about.html";
-
 }
