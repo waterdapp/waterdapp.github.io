@@ -30,17 +30,14 @@ class Seed {
         this.src = '../src/assets/seeds/seed'+ parseInt(index) +'.png';
         this.description = SEEDS_DESCRIPTION[index-1];
         this.image = seedsImages[index-1];
-        this.fruits = [];
+        
         this.firstBranchPos = {x:0, y:0};
         this.radiusCrown = 0;
         this.middlePos = {x:0, y:0};
         this.maxFruits = 5;
         this.countFruits = 0;
-        this.imgWidth = this.imgWidthOriginal = 250;
-        this.imgHeight = this.imgHeightOriginal  = 250;
-        this.x = window.innerWidth / 2 - 100 - this.imgWidth / 2;
-        this.y = potProperties.y - this.imgHeight / 2 + bob;
-        this.recalculatePos();
+
+        this.fruit = new Fruit(this);
     }
     
     dataTitle() {
@@ -61,16 +58,7 @@ class Seed {
     }
     
     draw() {
-        //image(this.image, window.innerWidth / 2 - 100 - this.imgWidth / 2, window.innerHeight * seedHeightAlterer - this.imgHeight / 2 - 200 + bob, this.imgWidth, this.imgHeight);
-        image(this.image, this.x, this.y + bob, this.imgWidth, this.imgHeight);
-        
-        if (growthValue > 80) {
-            for (let i = 0; i < this.fruits.length; i++) {
-                this.fruits[i].draw();
-                console.log("fruit draw")
-            }
-        }
-        this.recalculatePos();
+        image(this.image, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
     }
 
     loadPlantMaterial() {

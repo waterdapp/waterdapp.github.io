@@ -18,7 +18,7 @@ let randPos;
 let canvas;
 let value = 0;
 
-let money = 0;
+let fruitsPickedUp = 0;
 let coinImage;
 
 let img;
@@ -52,13 +52,18 @@ var endReached = 'no';
 
 let seedsImages = [];
 let fruitsImages = [];
+let fruitsHidden = [];
+let fruitsInBasket = 0;
+let basketCapacity = 8;
+let dayWhenNoFruits = 0;
+let nextHarvest = 2;
 
 let startButton;
 let howToGif
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress, growthProgress, growthMax = 130;
+let hydrationProgress, healthProgress, growthProgress, growthMax = 110;
 let speedSlider;
 let sliderText;
 let bob = 0
@@ -69,6 +74,9 @@ let mousedown = false;
 let currentselected = "";
 let selectwateringcan;
 let selectpesticide;
+let selectbasket;
+let basket1;
+let basket2
 let pesticide2;
 let pesticide;
 let dayCounter;
@@ -78,6 +86,14 @@ let bug2;
 var gif_loadImgL, gif_createImgR;
 let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
+
+let numFruits = 0;
+let maxFruits = 0;
+
+// this boolean is only used after regrowing
+let canPickUp = true;
+// if the tree is empty
+let noFruits = false;
 
 daySpeeds = [0.02, 0.1, 0.18];
 growthSpeeds = [0.5, 1, 2];
@@ -127,12 +143,9 @@ function preload() {
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
   bug1 = loadImage('../src/assets/wateringcans/bug1.png');
   bug2 = loadImage('../src/assets/wateringcans/bug2.png');
-  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
-  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
-  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
-  gif_loadImgL = loadImage("../src/assets/grass/grass left.gif");
-  gif_loadImgR = loadImage("../src/assets/grass/grass right.gif");
-  howToGif = loadImage("../src/assets/HowToPlay/HowToPlayButton.gif");
+
+  basket1 = loadImage('../src/assets/fruits/basket1.png');
+  basket2 = loadImage('../src/assets/fruits/basket2.png');
   
 
   //Music section
@@ -159,10 +172,15 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+
+  basket1.loadPixels();
+  basket2.loadPixels();
+
   gif_createImgL = createImg("../src/assets/grass/grass left.gif");
   gif_createImgR = createImg("../src/assets/grass/grass right.gif");
   howTOgif = createImg("../src/assets/HowToPlay/HowToPlayButton.gif");
   
+
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -230,8 +248,15 @@ function setup() {
         currentselected = "pesticide"
       })
 
+      selectbasket = createButton('e')
+      selectbasket.html('<img width="100" height="100" src="../src/assets/fruits/basket1.png"></img>')
+      selectbasket.position(270, 10);
+      selectbasket.mousePressed(() => {
+        currentselected = "basket";
+      })
 
-      coinElement = createP('<img width="100" height="100" src="../src/assets/coins/coin.png"> <span id="moneyDisplay">'+ money + '</span>');
+
+      coinElement = createP('<img width="100" height="100" src="../src/assets/fruits/fruit'+seed.index+'.png"> <span id="moneyDisplay">'+ fruitsPickedUp + '</span>');
       coinElement.position(10, 120);
 
       growthProgress = newProgress(150, canvas.height - 50, growthMax, 'growthProgress');
@@ -278,6 +303,7 @@ function setup() {
 }
 
 function draw() {
+  numFruits = 0;
   if (isLogoVisible) {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
     howToPlayGif = image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 650, 300, 300 );  // this is not
@@ -286,7 +312,11 @@ function draw() {
     //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
   }
   if (!isLogoVisible) {
+
+    document.getElementById("moneyDisplay").innerHTML = fruitsPickedUp;
+
     howTOgif.position(window.innerWidth * 20, window.innerHeight * 20 );
+
     if (!showbug) {
       var randomnumber = Math.floor(random(0, 1000))
       if (randomnumber === 1) {
@@ -447,6 +477,14 @@ function draw() {
         }
       }
     }
+
+
+    // seed disappears when it is small enough
+    if (seedImgWidth > 60) {
+      seed.draw();
+    }
+    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
@@ -455,12 +493,51 @@ function draw() {
         if (hydrationProgress.value() > 20) {
           healthProgress.value(healthProgress.value() + 0.2);
         }
-
-
       } else {
         image(watering1, mouseX - 35, mouseY - 66, 200, 200)
       }
     }
+
+    // Draw the basket
+    if(currentselected === 'basket') {
+      // if mouse clicked
+      if (mousedown) {
+        // if basket picks up fruits
+        if (growthValue >= growthMax && fruitsInBasket < basketCapacity && fruitsHidden.length < maxFruits) {
+          image(seed.fruit.image, mouseX - FRUIT_SIZE/2, mouseY, FRUIT_SIZE, FRUIT_SIZE);
+        }
+        image(basket2, mouseX - 100, mouseY - 60, 200, 200);
+      } else {
+        // if basket is full
+        if (fruitsInBasket >= basketCapacity) {
+          for (x = mouseX - 3*FRUIT_SIZE/2; x < mouseX + FRUIT_SIZE; x += FRUIT_SIZE/2) {
+            image(seed.fruit.image, x, mouseY, FRUIT_SIZE, FRUIT_SIZE);
+          //image(seed.fruit.image, mouseX - FRUIT_SIZE/2, mouseY, FRUIT_SIZE, FRUIT_SIZE);
+          }
+        }
+        image(basket1, mouseX - 100, mouseY - 60, 200, 200);
+
+      }
+    }
+
+  
+    if (noFruits == true && maxFruits != 0 && fruitsHidden.length >= maxFruits) {
+      if (dayCounter >= dayWhenNoFruits + nextHarvest) {
+        console.log("fruits should reappear")
+        console.log("in 10 seconds you can pick up fruits")
+        
+        fruitsHidden = [];
+        
+        setTimeout(() => {
+          console.log("you can pick up fruits now");
+          canPickUp = true;
+        }, 10000)
+
+        noFruits = false;
+      }
+    }
+    
+
     //Draw pesticide
     if (currentselected === 'pesticide') {
       if (mousedown) {
@@ -500,12 +577,18 @@ function draw() {
     //update growth bar
     growthProgress.value(growthValue);
 
+    // Update max fruits
+    maxFruits = numFruits;
+
     // End Screen
 
     if (healthProgress.value() === 0) {
       if (endReached === 'no') {
         endReached = 'yes';
-        endDayScore = dayCounter;
+        // the score is the number of days multiplied by the number of fruits
+        endDayScore = dayCounter * fruitsPickedUp;
+        numFruits = 0;
+        maxFruits = 0;
         endOfGame();
       }
     }
@@ -514,7 +597,37 @@ function draw() {
       themeMusic.play();
     }
   }
-  
+}
+
+// A click == A fruit
+function mouseReleased() {
+  if (growthValue >= growthMax && currentselected == "basket" && fruitsHidden.length < maxFruits && fruitsInBasket < basketCapacity && canPickUp == true) {
+    
+    randIndex = floor(random(maxFruits));
+    while(fruitsHidden.includes(randIndex)) {
+      randIndex = floor(random(maxFruits));
+    }
+    fruitsHidden.push(randIndex);
+    fruitsInBasket++;
+    fruitsPickedUp++;
+  }
+  // if basket is full
+  if (fruitsInBasket >= basketCapacity) {
+    console.log("basket is full")
+    setTimeout(() => {
+      fruitsInBasket = 0;
+      console.log("basket cleared");
+    }, 5000)
+  }
+  // if all fruits are collected
+  if (maxFruits != 0 && fruitsHidden.length >= maxFruits) {
+    if (noFruits == false) {
+      noFruits = true;
+      canPickUp = false;
+      fruitsInBasket = 0;
+      dayWhenNoFruits = dayCounter;
+    } 
+  }
 }
 
 
@@ -577,7 +690,6 @@ function drawMoney() {
 
 }
 
-let countFruits = 0
 
 // Draw plant function
 function branch(len) {
@@ -601,9 +713,11 @@ function branch(len) {
     rotate(-treeAngle+(bob/1600));
     branch(len * 0.75)
     pop();
-    if (len > 25 && growthValue > 50) {
-      image(new Fruit(seed).image, 0, 0, 20, 20);
-      countFruits++;
+    if (len > 30 && growthValue > 50) {
+      if (!fruitsHidden.includes(numFruits)) {
+        image(seed.fruit.image, 0, 0, 20, 20);
+      }
+      numFruits++;
     }
 
   }
@@ -662,41 +776,12 @@ function daySpeedPrompt() {
 function keyPressed() {
   if (keyCode === 50) {
     currentselected = 'pesticide';
-    if (currentselected === 'pesticide') {
-      if (mousedown) {
-        image(pesticide2, mouseX - 61, mouseY - 60, 200, 200)
-      } else {
-        image(pesticide, mouseX - 35, mouseY - 66, 200, 200);
-      }
-    }
-  } else if (keyCode === 40) {
-    currentselected = 'pesticide';
-    if (currentselected === 'pesticide') {
-      if (mousedown) {
-        image(pesticide2, mouseX - 61, mouseY - 60, 200, 200)
-      } else {
-        image(pesticide, mouseX - 35, mouseY - 66, 200, 200);
-      }
-    }
-  }
-  if (keyCode === 49) {
+  } else if (keyCode === 49) {
     currentselected = 'watering_can';
-    if (currentselected === 'watering_can') {
-      if (mousedown) {
-        image(watering2, mouseX - 61, mouseY - 60, 200, 200)
-      } else {
-        image(watering1, mouseX - 35, mouseY - 66, 200, 200)
-      }
-    }
-  } else if (keyCode === 35) {
-    currentselected = 'watering_can';
-    if (currentselected === 'watering_can') {
-      if (mousedown) {
-        image(watering2, mouseX - 61, mouseY - 60, 200, 200)
-      } else {
-        image(watering1, mouseX - 35, mouseY - 66, 200, 200)
-      }
-    }
+  } else if (keyCode === 51) {
+    currentselected = 'basket';
+  } else if (keyCode === 48) {
+    currentselected = "";
   }
 
 }
