@@ -46,7 +46,7 @@ let startButton;
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
-let hydrationProgress, healthProgress, growthProgress, growthMax = 130;
+let hydrationProgress, healthProgress, growthProgress, growthMax = 110;
 let speedSlider;
 let sliderText;
 let bob = 0
@@ -57,6 +57,8 @@ let mousedown = false;
 let currentselected = "";
 let selectwateringcan;
 let selectpesticide;
+let selectbasket;
+let basket;
 let pesticide2;
 let pesticide;
 let dayCounter;
@@ -114,9 +116,7 @@ function preload() {
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
   bug1 = loadImage('../src/assets/wateringcans/bug1.png');
   bug2 = loadImage('../src/assets/wateringcans/bug2.png');
-  cloud1 = loadImage('../src/assets/clouds/cloud1.png');
-  cloud2 = loadImage('../src/assets/clouds/cloud2.png');
-  cloud3 = loadImage('../src/assets/clouds/cloud3.png');
+  basket = loadImage('../src/assets/fruits/basket.png');
 
   //Music section
   //set global sound formats
@@ -142,6 +142,7 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+  basket.loadPixels();
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -207,6 +208,13 @@ function setup() {
       selectpesticide.position(140, 10)
       selectpesticide.mousePressed(() => {
         currentselected = "pesticide"
+      })
+
+      selectbasket = createButton('e')
+      selectbasket.html('<img width="100" height="100" src="../src/assets/fruits/basket.png"></img>')
+      selectbasket.position(270, 10);
+      selectbasket.mousePressed(() => {
+        currentselected = "basket";
       })
 
 
@@ -418,11 +426,18 @@ function draw() {
         }
       }
     }
+
     // seed disappears when it is small enough
     if (seedImgWidth > 60) {
       seed.draw();
     }
     image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+
+    // Draw the basket
+    if(currentselected === 'basket') {
+      image(basket, mouseX - 100, mouseY - 60, 200, 200)
+    }
+
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
