@@ -13,6 +13,8 @@ let bugPosition = {
   y: (window.innerHeight / 2) + 140,
 }
 //let whichSeed;
+let howToPlayGif;
+let randPos;
 let seedHeightAlterer
 let canvas;
 let value = 0;
@@ -43,6 +45,7 @@ let seedsImages = [];
 let fruitsImages = [];
 
 let startButton;
+let howToGif
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
@@ -63,6 +66,7 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
+var gif_loadImgL, gif_createImgR;
 let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
@@ -117,6 +121,10 @@ function preload() {
   cloud1 = loadImage('../src/assets/clouds/cloud1.png');
   cloud2 = loadImage('../src/assets/clouds/cloud2.png');
   cloud3 = loadImage('../src/assets/clouds/cloud3.png');
+  gif_loadImgL = loadImage("../src/assets/grass/grass left.gif");
+  gif_loadImgR = loadImage("../src/assets/grass/grass right.gif");
+  howToGif = loadImage("../src/assets/HowToPlay/HowToPlayButton.gif");
+  
 
   //Music section
   //set global sound formats
@@ -142,6 +150,10 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+  gif_createImgL = createImg("../src/assets/grass/grass left.gif");
+  gif_createImgR = createImg("../src/assets/grass/grass right.gif");
+  howTOgif = createImg("../src/assets/HowToPlay/HowToPlayButton.gif");
+  
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -258,9 +270,14 @@ function setup() {
 
 function draw() {
   if (isLogoVisible) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
+    howToPlayGif = image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 650, 300, 300 );  // this is not
+    howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 650, );
+    howTOgif.mousePressed(aboutRedirect);
+    //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
   }
   if (!isLogoVisible) {
+
     if (!showbug) {
       var randomnumber = Math.floor(random(0, 1000))
       if (randomnumber === 1) {
@@ -464,12 +481,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-    //draw a rectangle
-    strokeWeight(5);
-    stroke("black")
-    fill("gray")
-    rectMode(CENTER)
-    rect(window.innerWidth - 500, 125, 1000, 250)
+        //draw a rectangle
+        strokeWeight(5);
+        stroke("black")
+        fill("gray")
+        rectMode(CENTER)
+        rect(window.innerWidth - 400, 150, 800, 300 )
+
 
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
@@ -499,6 +517,52 @@ function draw() {
 }
 
 
+function seedDataBody() {
+  let infoLabel = createP('seedDataBody');
+  infoLabel.parent('sketchHolder');
+  infoLabel.id('seedDataBody');
+  let message = '';
+  if (randSeedNum == 1) {
+    message = 'you have found a generic seed!';
+    message2 = "these are dirt cheap and [enter generic fact here]"
+  } else if (randSeedNum == 2) {
+    message = 'you have found a pearl seed!';
+    message2 = "The pearl seed is a famous trickster plant, <br>because despite the name, pearl seeds are worth<br> very little.Howerer, they do have a pleasant<br>aroma when crushed."
+  } else if (randSeedNum == 3) {
+    message = 'you have found a pear seed!';
+    message2 = "The pear seed is misleadingly named, as the tree <br>doesn't actually grow pears. Instead, the fruits <br>of the pear tree are actually bitter,<br> pear shaped pods which are used in many medicianal remedys."
+  } else if (randSeedNum == 4) {
+    message = 'you have found a ginger seed!';
+    message = "If you enjoy the taste of ginger, then a ginger tree<br>will be an exellent addition to your garden! The fruits<br> of the tree are the famous root (don't ask),<br> so you get a year long supply if you look after your plant!"
+  } else if (randSeedNum == 5) {
+    message = 'you have found a coal seed!';
+    message2 = "When the coal tree and it's seeds were found, it brought <br> the end of destructive coal mining, as every part of<br> the tree burns like coal, and farming the species is <br> much easier than mining."
+  } else if (randSeedNum == 6) {
+    message = 'you have found a pebble seed!';
+    message2 = "although abundant, pebble seeds can be quite hard <br>to find,as they blend into their most common habitat, <br>shingle beaches.The wood of the pebble tree becomes as<br> hard as stone when left in seawater for five days."
+  } else if (randSeedNum == 7) {
+    message = 'you have found a blood seed!';
+    message2 = "The blood seed is widely regarded as Mother Nature's <br>most accursed creation, and folk tales tell of blood<br> trees using their branches to skewer unwary travellers."
+  } else if (randSeedNum == 8) {
+    message = 'you have found a potato seed!'
+    message2 = "Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?"
+  }
+  infoLabel.html(message + `
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
+  `)
+}
+function loadSeed() {
+  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
+  //randSeedNum = 4
+  seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
+
+  return loadImage(seedImgPath);
+}
+function drawSeed() {
+  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+  drawGrassGif();
+
+
 function loadLeafMaterial() {
   randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
   leafMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
@@ -508,6 +572,7 @@ function loadLeafMaterial() {
 
 function drawMoney() {
   image(coinImage)
+
 }
 
 let countFruits = 0
@@ -627,4 +692,15 @@ function keyPressed() {
       }
     }
   }
+
+}
+function drawGrassGif(){
+  randPos = random(  window.innerHeight / 2 - 200)
+  image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
+  gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
+}
+
+function aboutRedirect() {
+  window.location = "about.html";
+
 }
