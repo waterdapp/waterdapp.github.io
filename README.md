@@ -1,6 +1,8 @@
 # Waterd
 ## Waterd - Look after your very own online plant!
 
+![Waterd Logo](src/branding/Logo.png)
+
 # How to get the game
 
 There are a couple of ways to play the game:
@@ -33,7 +35,12 @@ You can also play Waterd on your computer.
 2. Perform `git fetch` and `git pull` to make sure that you have the latest version installed.
 3. Run `npm install` and `npm run dev` to open it.
 
+![Screenshot of Waterd](src/branding/screenshot2.PNG)
 
 # How to play the game
 
 See how to play the game by clicking [here](https://waterdapp.github.io/about.html).
+
+![Screenshot of Waterd](src/branding/screenshot1.PNG)
+
+**Have fun!**
