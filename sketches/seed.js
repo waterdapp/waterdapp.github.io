@@ -58,13 +58,6 @@ class Seed {
     
     draw() {
         image(this.image, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
-        
-        if (growthValue > 80) {
-            for (let i = 0; i < this.fruits.length; i++) {
-                this.fruits[i].draw();
-                console.log("fruit draw")
-            }
-        }
     }
 
     loadPlantMaterial() {

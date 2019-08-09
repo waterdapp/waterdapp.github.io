@@ -79,6 +79,7 @@ let maxFruits = 0;
 
 // this boolean is only used after regrowing
 let canPickUp = true;
+// if the tree is empty
 let noFruits = false;
 
 daySpeeds = [0.02, 0.1, 0.18];
@@ -485,14 +486,19 @@ function draw() {
       }
     }
 
-        // 
+  
     if (noFruits == true && maxFruits != 0 && fruitsHidden.length >= maxFruits) {
       if (dayCounter >= dayWhenNoFruits + nextHarvest) {
         console.log("fruits should reappear")
+        console.log("in 10 seconds you can pick up fruits")
         
-        //regrowFruits();
+        fruitsHidden = [];
         
-  
+        setTimeout(() => {
+          console.log("you can pick up fruits now");
+          canPickUp = true;
+        }, 10000)
+
         noFruits = false;
       }
     }
@@ -564,20 +570,6 @@ function draw() {
   }
 }
 
-function regrowFruits() {
-  console.log("regrow start")
-  for (let i = 0; i < maxFruits; i++) { 
-    console.log("inside for loop")
-    setTimeout(() => {
-      randIndex = floor(random(fruitHidden.length));
-      console.log(randIndex);
-      console.log(fruitsHidden)
-      fruitsHidden.splice(randIndex, 1);
-    }, 250);
-  }
-  canPickUp = true;
-}
-
 // A click == A fruit
 function mouseReleased() {
   if (growthValue >= growthMax && currentselected == "basket" && fruitsHidden.length < maxFruits && fruitsInBasket < basketCapacity && canPickUp == true) {
@@ -589,7 +581,8 @@ function mouseReleased() {
     fruitsHidden.push(randIndex);
     fruitsInBasket++;
     fruitsPickedUp++;
-  } 
+  }
+  // if basket is full
   if (fruitsInBasket >= basketCapacity) {
     console.log("basket is full")
     setTimeout(() => {
@@ -597,15 +590,13 @@ function mouseReleased() {
       console.log("basket cleared");
     }, 5000)
   }
+  // if all fruits are collected
   if (maxFruits != 0 && fruitsHidden.length >= maxFruits) {
     if (noFruits == false) {
       noFruits = true;
       canPickUp = false;
       fruitsInBasket = 0;
-      console.log("no fruits is true")
-      console.log("day counter is " + dayCounter)
       dayWhenNoFruits = dayCounter;
-      console.log("day when no fruits is " + dayWhenNoFruits)
     } 
   }
 }
