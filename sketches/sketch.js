@@ -13,6 +13,7 @@ let bugPosition = {
   y: (window.innerHeight / 2)+ 140,
 }
 //let whichSeed;
+let howToPlayGif;
 let randPos;
 let seedHeightAlterer
 let canvas;
@@ -248,9 +249,10 @@ function setup() {
 function draw() {
   if (isLogoVisible) {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
-    image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 650, 300, 300 )  // this is not
-    howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 650, )
-    createA('http://localhost:3002/about.html', 'Help page');
+    howToPlayGif = image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 650, 300, 300 );  // this is not
+    howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 650, );
+    howTOgif.mousePressed(aboutRedirect);
+    //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
   }
   if (!isLogoVisible) {
    //Every other second run this
@@ -616,4 +618,8 @@ function drawGrassGif(){
   randPos = random(  window.innerHeight / 2 - 200)
   image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
   gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
+}
+
+function aboutRedirect() {
+  window.location = "about.html";
 }
