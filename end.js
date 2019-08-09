@@ -13,4 +13,5 @@ function loadScore() {
     document.getElementById("twitterShare").href= "https://twitter.com/intent/tweet?text=" + shareText;
     document.getElementById("emailShare").href= "mailto:?subject=Check out this score I got on Waterd!&body=" + shareText;
     document.getElementById("evernoteShare").href= "https://www.evernote.com/clip.action?url=http%3A%2F%2Fwww.addthis.com%2F%23.XU0uu06seaw.evernote&title=Waterd - Online Plant Simulator&body=Waterd is an online plant simulator which lets you look after your very own virtual plant! Play it now at https://waterdapp.github.io/";
+    document.getElementById("redditShare").href= "https://www.reddit.com/submit?url=https%3A%2F%2Fwaterdapp.github.io&title=Waterd%20%7C%20Look%20after%20your%20very%20own%20virtual%20plant!";
 }
