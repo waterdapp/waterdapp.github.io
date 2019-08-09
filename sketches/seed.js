@@ -81,6 +81,6 @@ class Seed {
 
     recalculatePos() {
         this.x = window.innerWidth / 2 - 90 - this.imgWidth / 2;
-        this.y = window.innerHeight * seedHeightAlterer - this.imgHeight / 2 - 200;
+        this.y = potProperties.y + 190 - this.imgHeight / 2;
     }
 }
