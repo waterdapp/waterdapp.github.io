@@ -15,7 +15,6 @@ let bugPosition = {
 //let whichSeed;
 let howToPlayGif;
 let randPos;
-let seedHeightAlterer;
 let canvas;
 let value = 0;
 
