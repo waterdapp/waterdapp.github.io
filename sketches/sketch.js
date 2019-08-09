@@ -59,7 +59,7 @@ let dayWhenNoFruits = 0;
 let nextHarvest = 2;
 
 let startButton;
-let howToGif
+let howToGif;
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
@@ -87,6 +87,9 @@ var gif_loadImgL, gif_createImgR;
 let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
+
+let seedImgWidth = 150;
+let seedImgHeight = 150;
 let numFruits = 0;
 let maxFruits = 0;
 
@@ -306,7 +309,7 @@ function draw() {
   numFruits = 0;
   if (isLogoVisible) {
     image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
-    howToPlayGif = image(howToGif,window.innerWidth / 2 -150, window.innerHeight / 2 - 650, 300, 300 );  // this is not
+    howToPlayGif = image(howTOgif,windowWidth / 2 -150, windowHeight / 2 - 650, 300, 300 );  // this is not
     howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 650, );
     howTOgif.mousePressed(aboutRedirect);
     //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
