@@ -30,12 +30,13 @@ class Seed {
         this.src = '../src/assets/seeds/seed'+ parseInt(index) +'.png';
         this.description = SEEDS_DESCRIPTION[index-1];
         this.image = seedsImages[index-1];
-        this.fruits = [];
+        
         this.firstBranchPos = {x:0, y:0};
         this.radiusCrown = 0;
         this.middlePos = {x:0, y:0};
         this.maxFruits = 5;
         this.countFruits = 0;
+        this.fruit = new Fruit(this);
     }
     
     dataTitle() {
