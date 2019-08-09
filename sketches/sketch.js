@@ -13,7 +13,7 @@ let bugPosition = {
   y: (window.innerHeight / 2) + 140,
 }
 //let whichSeed;
-let seedHeightAlterer
+let seedHeightAlterer;
 let canvas;
 let value = 0;
 
@@ -26,9 +26,19 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
-let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let seed;
 let plantMaterial, plantMaterialPath, leafMaterialPath, leafMaterial;
 let pot;
+let potProperties = {
+  x: window.innerWidth / 2 - 350,
+  y: window.innerHeight / 2 - 200,
+  width: 500,
+  height: 500
+}
+let plantProperties = {
+  x: 0,
+  y: 0
+}
 let clouds = [];
 let cloudImages = [];
 let cloudWidth = 300;
@@ -99,10 +109,10 @@ function preload() {
 
   seed = new Seed(floor(random(1, 8)));
 
+  plantProperties.x = window.innerWidth / 2 - seed.imgWidthOriginal / 2 + 30;
+  plantProperties.y = potProperties.y + 215;
 
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-
-  seedImg = seed.image;
 
   plantMaterial = seed.loadPlantMaterial();
 
@@ -293,10 +303,11 @@ function draw() {
         growthValue += 2;
         plantThickness += 1 / 25;
       }
-      // start shrinking seed after certain amount of growth
+      // start shrinking seed after certain amount of plant growth
       if ((growthValue >= 20) && (growthValue <= 80)) {
-        seedImgWidth -= 8;
-        seedImgHeight -= 8;
+        seed.imgWidth -= 8;
+        seed.imgHeight -= 8;
+        seed.recalculatePos();
       }
 
     }           
@@ -339,21 +350,23 @@ function draw() {
         );
       }
     }
-    //Draw the island and pot
+    //Draw the island
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     //Draw plant related stuff!
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
     push();
-    translate(window.innerWidth / 2 - seedImgWidthOriginal / 2 + 30, window.innerHeight * 0.75 - seedImgHeightOriginal / 2 - 205 + bob);
+    translate(plantProperties.x, plantProperties.y + bob);
     branch(growthValue);
     pop();
 
     // seed disappears when it is small enough
-    if (seedImgWidth > 60) {
+    if (seed.imgWidth > 60) {
       seed.draw();
     }
-    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+    //Draw the pot
+    image(pot, potProperties.x, potProperties.y + bob, potProperties.width, potProperties.height)
+
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
@@ -418,11 +431,6 @@ function draw() {
         }
       }
     }
-    // seed disappears when it is small enough
-    if (seedImgWidth > 60) {
-      seed.draw();
-    }
-    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
@@ -444,12 +452,6 @@ function draw() {
       } else {
         image(pesticide, mouseX - 100, mouseY - 66, 200, 200);
       }
-    }
-
-    if (randSeedNum == 6 || randSeedNum == 8) {
-      seedHeightAlterer = 0.64
-    } else {
-      seedHeightAlterer = 0.65
     }
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
@@ -512,7 +514,7 @@ function drawMoney() {
 
 let countFruits = 0
 
-// Draw plant
+// Draw plant function
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
   if (len > 10) {
@@ -544,10 +546,14 @@ function branch(len) {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  // fix positioning error when window resized
+  // fix positioning errors when window resized
   hydrationProgress.position(canvas.width - 150, canvas.height / 2);
   speedSlider.position(40, canvas.height - 50);
   growthProgress.position(200, canvas.height - 50);
+  potProperties.x = window.innerWidth / 2 - 350;
+  potProperties.y = window.innerHeight / 2 - 200;
+  plantProperties.x = window.innerWidth / 2 - seed.imgWidthOriginal / 2 + 30;
+  plantProperties.y = potProperties.y + 215;
 }
 
 function clearCanvas() {
