@@ -646,13 +646,13 @@ function branch(len) {
   }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  // fix positioning error when window resized
-  hydrationProgress.position(canvas.width - 150, canvas.height / 2);
-  speedSlider.position(40, canvas.height - 50);
-  growthProgress.position(200, canvas.height - 50);
-}
+// function windowResized() {
+//   resizeCanvas(windowWidth, windowHeight);
+//   // fix positioning error when window resized
+//   hydrationProgress.position(canvas.width - 150, canvas.height / 2);
+//   speedSlider.position(40, canvas.height - 50);
+//   growthProgress.position(200, canvas.height - 50);
+// }
 
 function clearCanvas() {
   if (isLogoVisible) {
