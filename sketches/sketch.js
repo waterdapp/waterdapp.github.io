@@ -13,7 +13,8 @@ let bugPosition = {
   y: (window.innerHeight / 2) + 140,
 }
 //let whichSeed;
-let seedHeightAlterer
+let howToPlayGif;
+let randPos;
 let canvas;
 let value = 0;
 
@@ -26,9 +27,19 @@ let cloud1;
 let cloud2;
 let cloud3;
 let sun;
-let seed, seedImgWidth = seedImgWidthOriginal = 250, seedImgHeight = seedImgHeightOriginal = 250, seedImgPath;
+let seed;
 let plantMaterial, plantMaterialPath, leafMaterialPath, leafMaterial;
 let pot;
+let potProperties = {
+  x: window.innerWidth / 2 - 350,
+  y: window.innerHeight / 2 - 200,
+  width: 500,
+  height: 500
+}
+let plantProperties = {
+  x: 0,
+  y: 0
+}
 let clouds = [];
 let cloudImages = [];
 let cloudWidth = 300;
@@ -48,6 +59,7 @@ let dayWhenNoFruits = 0;
 let nextHarvest = 2;
 
 let startButton;
+let howToGif;
 let randSeedNum;
 let randStickNum;
 let isLogoVisible = true;
@@ -71,9 +83,13 @@ let dayCounter;
 let dayCounterValueElement;
 let bug1;
 let bug2;
+var gif_loadImgL, gif_createImgR;
 let bugpesticidecollision = false;
 let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
+
+let seedImgWidth = 150;
+let seedImgHeight = 150;
 let numFruits = 0;
 let maxFruits = 0;
 
@@ -115,10 +131,10 @@ function preload() {
 
   seed = new Seed(floor(random(1, 8)));
 
+  plantProperties.x = window.innerWidth / 2 - seed.imgWidthOriginal / 2 + 30;
+  plantProperties.y = potProperties.y + 215;
 
   pressStart2P = loadFont('src/fonts/PressStart2P.ttf')
-
-  seedImg = seed.image;
 
   plantMaterial = seed.loadPlantMaterial();
 
@@ -130,9 +146,11 @@ function preload() {
   pesticide2 = loadImage('../src/assets/wateringcans/pesticide2.png');
   bug1 = loadImage('../src/assets/wateringcans/bug1.png');
   bug2 = loadImage('../src/assets/wateringcans/bug2.png');
+
   basket1 = loadImage('../src/assets/fruits/basket1.png');
   basket2 = loadImage('../src/assets/fruits/basket2.png');
   
+
   //Music section
   //set global sound formats
   soundFormats('mp3', 'ogg');
@@ -157,8 +175,15 @@ function setup() {
   watering2.loadPixels();
   pesticide.loadPixels();
   pesticide2.loadPixels();
+
   basket1.loadPixels();
   basket2.loadPixels();
+
+  gif_createImgL = createImg("../src/assets/grass/grass left.gif");
+  gif_createImgR = createImg("../src/assets/grass/grass right.gif");
+  howTOgif = createImg("../src/assets/HowToPlay/HowToPlayButton.gif");
+  
+
   pot.loadPixels();
   bug1.loadPixels();
   bug2.loadPixels();
@@ -283,10 +308,18 @@ function setup() {
 function draw() {
   numFruits = 0;
   if (isLogoVisible) {
-    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);
+    image(img, window.innerWidth / 2 - 320, window.innerHeight / 2 - 320, 640, 640);//THIS one is the logo
+    howToPlayGif = image(howTOgif,windowWidth / 2 -150, windowHeight / 2 - 650, 300, 300 );  // this is not
+    howTOgif.position(window.innerWidth / 2 -150, window.innerHeight / 2 - 650, );
+    howTOgif.mousePressed(aboutRedirect);
+    //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
   }
   if (!isLogoVisible) {
+
     document.getElementById("moneyDisplay").innerHTML = fruitsPickedUp;
+
+    howTOgif.position(window.innerWidth * 20, window.innerHeight * 20 );
+
     if (!showbug) {
       var randomnumber = Math.floor(random(0, 1000))
       if (randomnumber === 1) {
@@ -319,10 +352,11 @@ function draw() {
         growthValue += 2;
         plantThickness += 1 / 25;
       }
-      // start shrinking seed after certain amount of growth
+      // start shrinking seed after certain amount of plant growth
       if ((growthValue >= 20) && (growthValue <= 80)) {
-        seedImgWidth -= 8;
-        seedImgHeight -= 8;
+        seed.imgWidth -= 8;
+        seed.imgHeight -= 8;
+        seed.recalculatePos();
       }
 
     }           
@@ -365,21 +399,23 @@ function draw() {
         );
       }
     }
-    //Draw the island and pot
+    //Draw the island
     image(island, window.innerWidth / 2 - 600, window.innerHeight / 2 - 200 + bob, 1000, 1000)
 
     //Draw plant related stuff!
     treeAngle = ((2 * PI) * (sunPosition.y / window.innerWidth)) / 8
     push();
-    translate(window.innerWidth / 2 - seedImgWidthOriginal / 2 + 30, window.innerHeight * 0.75 - seedImgHeightOriginal / 2 - 205 + bob);
+    translate(plantProperties.x, plantProperties.y + bob);
     branch(growthValue);
     pop();
 
     // seed disappears when it is small enough
-    if (seedImgWidth > 60) {
+    if (seed.imgWidth > 60) {
       seed.draw();
     }
-    image(pot, window.innerWidth / 2 - 350, window.innerHeight / 2 - 200 + bob, 500, 500)
+    //Draw the pot
+    image(pot, potProperties.x, potProperties.y + bob, potProperties.width, potProperties.height)
+
     //Draw the watering can 
     if (currentselected === 'watering_can') {
       if (mousedown) {
@@ -444,6 +480,7 @@ function draw() {
         }
       }
     }
+
 
     // seed disappears when it is small enough
     if (seedImgWidth > 60) {
@@ -512,12 +549,6 @@ function draw() {
         image(pesticide, mouseX - 100, mouseY - 66, 200, 200);
       }
     }
-
-    if (randSeedNum == 6 || randSeedNum == 8) {
-      seedHeightAlterer = 0.64
-    } else {
-      seedHeightAlterer = 0.65
-    }
     // Make the text color red if hydration or health values are red
     if (hydrationProgress.value() === 0) {
       hydrationText.style('color', 'red');
@@ -531,12 +562,13 @@ function draw() {
     } else {
       healthText.style('color', 'white');
     }
-    //draw a rectangle
-    strokeWeight(5);
-    stroke("black")
-    fill("gray")
-    rectMode(CENTER)
-    rect(window.innerWidth - 500, 125, 1000, 250)
+        //draw a rectangle
+        strokeWeight(5);
+        stroke("black")
+        fill("gray")
+        rectMode(CENTER)
+        rect(window.innerWidth - 400, 150, 800, 300 )
+
 
     // Hidden Day Speed changer by pressing the space bar
     document.body.onkeydown = function (e) {
@@ -602,6 +634,53 @@ function mouseReleased() {
 }
 
 
+function seedDataBody() {
+  let infoLabel = createP('seedDataBody');
+  infoLabel.parent('sketchHolder');
+  infoLabel.id('seedDataBody');
+  let message = '';
+  if (randSeedNum == 1) {
+    message = 'you have found a generic seed!';
+    message2 = "these are dirt cheap and [enter generic fact here]"
+  } else if (randSeedNum == 2) {
+    message = 'you have found a pearl seed!';
+    message2 = "The pearl seed is a famous trickster plant, <br>because despite the name, pearl seeds are worth<br> very little.Howerer, they do have a pleasant<br>aroma when crushed."
+  } else if (randSeedNum == 3) {
+    message = 'you have found a pear seed!';
+    message2 = "The pear seed is misleadingly named, as the tree <br>doesn't actually grow pears. Instead, the fruits <br>of the pear tree are actually bitter,<br> pear shaped pods which are used in many medicianal remedys."
+  } else if (randSeedNum == 4) {
+    message = 'you have found a ginger seed!';
+    message = "If you enjoy the taste of ginger, then a ginger tree<br>will be an exellent addition to your garden! The fruits<br> of the tree are the famous root (don't ask),<br> so you get a year long supply if you look after your plant!"
+  } else if (randSeedNum == 5) {
+    message = 'you have found a coal seed!';
+    message2 = "When the coal tree and it's seeds were found, it brought <br> the end of destructive coal mining, as every part of<br> the tree burns like coal, and farming the species is <br> much easier than mining."
+  } else if (randSeedNum == 6) {
+    message = 'you have found a pebble seed!';
+    message2 = "although abundant, pebble seeds can be quite hard <br>to find,as they blend into their most common habitat, <br>shingle beaches.The wood of the pebble tree becomes as<br> hard as stone when left in seawater for five days."
+  } else if (randSeedNum == 7) {
+    message = 'you have found a blood seed!';
+    message2 = "The blood seed is widely regarded as Mother Nature's <br>most accursed creation, and folk tales tell of blood<br> trees using their branches to skewer unwary travellers."
+  } else if (randSeedNum == 8) {
+    message = 'you have found a potato seed!'
+    message2 = "Did you know that the potato seed can be eaten,<br> and is rumored to have a plain, bland flavour?"
+  }
+  infoLabel.html(message + `
+    <img width="50px" src=${'../src/assets/seeds/seed'.concat(randSeedNum, '.png')}></img>
+  `)
+}
+function loadSeed() {
+  randSeedNum = (Math.floor(Math.random() * 8) + 1).toString();
+  //randSeedNum = 4
+  seedImgPath = '../src/assets/seeds/seed'.concat(randNum, '.png');
+
+  return loadImage(seedImgPath);
+}
+function drawSeed() {
+  image(seedImg, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+  drawGrassGif();
+}
+
+
 function loadLeafMaterial() {
   randStickNum = ((Math.floor(Math.random() * 8) + 1)).toString();
   leafMaterialPath = '../src/assets/plantmaterials/stick'.concat(randStickNum, '.png');
@@ -611,10 +690,11 @@ function loadLeafMaterial() {
 
 function drawMoney() {
   image(coinImage)
+
 }
 
 
-// Draw plant
+// Draw plant function
 function branch(len) {
   let bob = sin(angle * 0.3) * 50;
   if (len > 10) {
@@ -645,6 +725,7 @@ function branch(len) {
 
   }
 }
+
 
 // function windowResized() {
 //   resizeCanvas(windowWidth, windowHeight);
@@ -702,4 +783,14 @@ function keyPressed() {
   } else if (keyCode === 48) {
     currentselected = "";
   }
+
+}
+function drawGrassGif(){
+  randPos = random(  window.innerHeight / 2 - 200)
+  image(gif_loadImgL,window.innerWidth / 2 , window.innerHeight / 2 + bob, + 200, 50, 50);
+  gif_createImgL.position(window.innerWidth / 2 , window.innerHeight / 2 + bob + 200);
+}
+
+function aboutRedirect() {
+  window.location = "about.html";
 }
