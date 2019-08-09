@@ -9,6 +9,8 @@ function endOfGame() {
 function loadScore() {
     var score = getURLParameter("score");
     document.getElementById("scoreText").innerHTML = score;
-    var tweetText = 'I just got a score of ' + score + ' on Waterd. Play it now at https://waterdapp.github.io/';
-    document.getElementById("href").href= "https://twitter.com/intent/tweet?text=" + tweetText;
+    var shareText = 'I just lasted ' + score + ' days on Waterd! Play it now at https://waterdapp.github.io/';
+    document.getElementById("twitterShare").href= "https://twitter.com/intent/tweet?text=" + shareText;
+    document.getElementById("emailShare").href= "mailto:?subject=Check out this score I got on Waterd!&body=" + shareText;
+    document.getElementById("evernoteShare").href= "https://www.evernote.com/clip.action?url=http%3A%2F%2Fwww.addthis.com%2F%23.XU0uu06seaw.evernote&title=Waterd - Online Plant Simulator&body=Waterd is an online plant simulator which lets you look after your very own virtual plant! Play it now at https://waterdapp.github.io/";
 }
