@@ -11,7 +11,7 @@ const SEEDS = {
 
 const SEEDS_DESCRIPTION = [
     "These are dirt cheap and [enter generic fact here]",
-    "The pearl seed is a famous trickster plant, because despite the name, pearl seeds are worthvery little. Howerer, they do have a pleasantaroma when crushed.",
+    "The pearl seed is a famous trickster plant, because despite the name, pearl seeds are worthvery little. Howerer, they do have a pleasant aroma when crushed.",
     "The pear seed is misleadingly named, as the tree doesn't actually grow pears. Instead, the fruits of the pear tree are actually bitter, pear shaped pods which are used in many medicianal remedies.",
     "If you enjoy the taste of ginger, then a ginger tree will be an exellent addition to your garden! The fruits of the tree are the famous root (don't ask), so you get a year long supply if you look after your plant!",
     "When the coal tree and it's seeds were found, it brought the end of destructive coal mining, as every part of the tree burns like coal, and farming the species is much easier than mining",
@@ -30,6 +30,12 @@ class Seed {
         this.src = '../src/assets/seeds/seed'+ parseInt(index) +'.png';
         this.description = SEEDS_DESCRIPTION[index-1];
         this.image = seedsImages[index-1];
+        this.fruits = [];
+        this.firstBranchPos = {x:0, y:0};
+        this.radiusCrown = 0;
+        this.middlePos = {x:0, y:0};
+        this.maxFruits = 5;
+        this.countFruits = 0;
     }
     
     dataTitle() {
@@ -51,6 +57,13 @@ class Seed {
     
     draw() {
         image(this.image, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+        
+        if (growthValue > 80) {
+            for (let i = 0; i < this.fruits.length; i++) {
+                this.fruits[i].draw();
+                console.log("fruit draw")
+            }
+        }
     }
 
     loadPlantMaterial() {
