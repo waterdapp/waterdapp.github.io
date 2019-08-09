@@ -36,6 +36,11 @@ class Seed {
         this.middlePos = {x:0, y:0};
         this.maxFruits = 5;
         this.countFruits = 0;
+        this.imgWidth = this.imgWidthOriginal = 250;
+        this.imgHeight = this.imgHeightOriginal  = 250;
+        this.x = window.innerWidth / 2 - 100 - this.imgWidth / 2;
+        this.y = potProperties.y - this.imgHeight / 2 + bob;
+        this.recalculatePos();
     }
     
     dataTitle() {
@@ -56,7 +61,8 @@ class Seed {
     }
     
     draw() {
-        image(this.image, window.innerWidth / 2 - 100 - seedImgWidth / 2, window.innerHeight * seedHeightAlterer - seedImgHeight / 2 - 200 + bob, seedImgWidth, seedImgHeight);
+        //image(this.image, window.innerWidth / 2 - 100 - this.imgWidth / 2, window.innerHeight * seedHeightAlterer - this.imgHeight / 2 - 200 + bob, this.imgWidth, this.imgHeight);
+        image(this.image, this.x, this.y + bob, this.imgWidth, this.imgHeight);
         
         if (growthValue > 80) {
             for (let i = 0; i < this.fruits.length; i++) {
@@ -64,11 +70,17 @@ class Seed {
                 console.log("fruit draw")
             }
         }
+        this.recalculatePos();
     }
 
     loadPlantMaterial() {
         plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(this.index, '.png');
 
         return loadImage(plantMaterialPath);
+    }
+
+    recalculatePos() {
+        this.x = window.innerWidth / 2 - 90 - this.imgWidth / 2;
+        this.y = potProperties.y + 190 - this.imgHeight / 2;
     }
 }
