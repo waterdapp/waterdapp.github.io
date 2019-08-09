@@ -36,6 +36,7 @@ class Seed {
         this.middlePos = {x:0, y:0};
         this.maxFruits = 5;
         this.countFruits = 0;
+
         this.fruit = new Fruit(this);
     }
     
@@ -64,5 +65,10 @@ class Seed {
         plantMaterialPath = '../src/assets/plantmaterials/stick'.concat(this.index, '.png');
 
         return loadImage(plantMaterialPath);
+    }
+
+    recalculatePos() {
+        this.x = window.innerWidth / 2 - 90 - this.imgWidth / 2;
+        this.y = potProperties.y + 190 - this.imgHeight / 2;
     }
 }
