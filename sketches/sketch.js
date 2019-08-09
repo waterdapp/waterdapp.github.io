@@ -44,6 +44,8 @@ let fruitsImages = [];
 let fruitsHidden = [];
 let fruitsInBasket = 0;
 let basketCapacity = 8;
+let dayWhenNoFruits = 0;
+let nextHarvest = 2;
 
 let startButton;
 let randSeedNum;
@@ -74,7 +76,10 @@ let healthText, hydrationText, speedText, seedText, growthText, daysText;
 
 let numFruits = 0;
 let maxFruits = 0;
-let pickingFruits = false;
+
+// this boolean is only used after regrowing
+let canPickUp = true;
+let noFruits = false;
 
 daySpeeds = [0.02, 0.1, 0.18];
 growthSpeeds = [0.5, 1, 2];
@@ -480,6 +485,19 @@ function draw() {
       }
     }
 
+        // 
+    if (noFruits == true && maxFruits != 0 && fruitsHidden.length >= maxFruits) {
+      if (dayCounter >= dayWhenNoFruits + nextHarvest) {
+        console.log("fruits should reappear")
+        
+        //regrowFruits();
+        
+  
+        noFruits = false;
+      }
+    }
+    
+
     //Draw pesticide
     if (currentselected === 'pesticide') {
       if (mousedown) {
@@ -546,9 +564,23 @@ function draw() {
   }
 }
 
+function regrowFruits() {
+  console.log("regrow start")
+  for (let i = 0; i < maxFruits; i++) { 
+    console.log("inside for loop")
+    setTimeout(() => {
+      randIndex = floor(random(fruitHidden.length));
+      console.log(randIndex);
+      console.log(fruitsHidden)
+      fruitsHidden.splice(randIndex, 1);
+    }, 250);
+  }
+  canPickUp = true;
+}
+
 // A click == A fruit
 function mouseReleased() {
-  if (growthValue >= growthMax && currentselected == "basket" && fruitsHidden.length < maxFruits && fruitsInBasket < basketCapacity) {
+  if (growthValue >= growthMax && currentselected == "basket" && fruitsHidden.length < maxFruits && fruitsInBasket < basketCapacity && canPickUp == true) {
     
     randIndex = floor(random(maxFruits));
     while(fruitsHidden.includes(randIndex)) {
@@ -564,6 +596,17 @@ function mouseReleased() {
       fruitsInBasket = 0;
       console.log("basket cleared");
     }, 5000)
+  }
+  if (maxFruits != 0 && fruitsHidden.length >= maxFruits) {
+    if (noFruits == false) {
+      noFruits = true;
+      canPickUp = false;
+      fruitsInBasket = 0;
+      console.log("no fruits is true")
+      console.log("day counter is " + dayCounter)
+      dayWhenNoFruits = dayCounter;
+      console.log("day when no fruits is " + dayWhenNoFruits)
+    } 
   }
 }
 
