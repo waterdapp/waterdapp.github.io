@@ -286,7 +286,7 @@ function draw() {
     //HelpLink(window.innerWidth / 2 , window.innerHeight / 2 - 600, 300, 300 );
   }
   if (!isLogoVisible) {
-
+    howTOgif.position(window.innerWidth * 20, window.innerHeight * 20 );
     if (!showbug) {
       var randomnumber = Math.floor(random(0, 1000))
       if (randomnumber === 1) {
